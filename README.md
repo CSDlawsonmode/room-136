@@ -9,7 +9,10 @@ Interactive 3D layout of the Caldwell High School media tech and esports compute
 | `index.html` | The 3D model. Single self-contained page; three.js and fonts load from CDNs, so it needs internet. Open it in a browser, or serve the folder (`python -m http.server`). |
 | `docs/Room413_Bleacher_Inquiry.pdf` | Dimensioned plan, south-wall cabinet details and questions for a bleacher vendor. |
 | `docs/Room413_Raceway_Plans.pdf` | FSR Smart-Way floor raceway concept over three layouts. |
-| `tools/figs.py`, `tools/build.py` | Scripts that draw the plans and assemble the PDFs. |
+| `docs/Room136_Phased_Bid_Package.pdf` | Draft four-phase bid package: infrastructure, Philips Hue lighting with screen sync, Dolby Atmos audio, retractable seating. Includes plans, a signal-flow diagram and a fill-in price sheet. Draft for district purchasing review. |
+| `tools/figs.py`, `tools/build.py` | Scripts that draw the plans and assemble the bleacher and raceway PDFs. |
+| `tools/figs_bid.py`, `tools/build_bid.py` | Scripts that draw the lighting, audio and signal-flow figures and assemble the bid package. |
+| `tools/pdfcommon.py` | Shared fonts and layout helpers for the PDF scripts. |
 
 The PDFs were made when the room was still called 413; the model has been renamed.
 
@@ -31,7 +34,9 @@ The PDFs were made when the room was still called 413; the model has been rename
 ```
 pip install -r tools/requirements.txt
 python tools/figs.py     # draws the plan images into tools/build/
-python tools/build.py    # writes the PDFs into docs/
+python tools/build.py    # writes the bleacher and raceway PDFs into docs/
+python tools/figs_bid.py # draws the bid figures into tools/build/
+python tools/build_bid.py  # writes the bid package into docs/
 ```
 
 ## Student data
