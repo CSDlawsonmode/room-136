@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}</style>
+<title>Room 136 Media Tech / Esports</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout concept: a surveyor's model viewer. Wide canvas on the left, a narrow control rail on the right that stacks under the canvas on phones. */
+:root {
+  --bg: #ECEEEF;
+  --surface: #FFFFFF;
+  --surface-2: #F3F5F5;
+  --fg: #14191C;
+  --muted: #5A656C;
+  --line: #D3D9DC;
+  --accent: #C93F0A;
+  --accent-fg: #FFFFFF;
+  --scene-bg: #D9DFE2;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1316; --surface: #171C20; --surface-2: #1E2429; --fg: #E7ECEE; --muted: #93A0A8;
+    --line: #2C353B; --accent: #FF8142; --accent-fg: #1B0F08; --scene-bg: #0A0D0F; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1316; --surface: #171C20; --surface-2: #1E2429; --fg: #E7ECEE; --muted: #93A0A8;
+  --line: #2C353B; --accent: #FF8142; --accent-fg: #1B0F08; --scene-bg: #0A0D0F; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-block: 20px 28px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.app { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; margin: 0; letter-spacing: .01em; }
+.sub { margin: 0; color: var(--muted); font-family: var(--font-mono); font-size: 12px; letter-spacing: .02em; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.stage { position: relative; background: var(--scene-bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+#view { width: 100%; height: clamp(440px, 72vh, 780px); touch-action: none; }
+#view canvas { display: block; width: 100%; height: 100%; }
+.hint { position: absolute; left: 12px; bottom: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); pointer-events: none; }
+.badge { position: absolute; right: 12px; top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); pointer-events: none; text-align: right; }
+.panel { display: flex; flex-direction: column; gap: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.group h2 { font-family: var(--font-display); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 0 0 8px; }
+.seg { display: grid; gap: 6px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.seg button, .chips button {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; text-align: left;
+  font-family: var(--font-display); font-weight: 500; font-size: 15px; line-height: 1.2;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button { padding: 6px 10px; font-size: 14px; }
+.chips button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+button:hover { border-color: var(--muted); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.desc { margin: 10px 0 0; color: var(--muted); font-size: 14px; min-height: 4.5em; }
+.toggles { display: grid; gap: 6px; }
+.toggles label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.toggles input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 14px; }
+dt { color: var(--muted); }
+dd { margin: 0; font-family: var(--font-mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.note { margin: 0; font-size: 12.5px; color: var(--muted); }
+.fallback { padding: 24px; color: var(--muted); }
+@media (max-width: 900px) {
+  .main { grid-template-columns: minmax(0, 1fr); }
+  #view { height: clamp(360px, 58vh, 560px); }
+  .seg { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="app">
+  <header>
+    <h1>Room 136 Media Tech / Esports</h1>
+    <p class="sub">Computer lab · 33′-4″ × 31′-4″ · 10′ walls · desks on casters</p>
+  </header>
+  <div class="main">
+    <section class="stage" aria-label="3D model of room 136">
+      <div id="view" role="img" aria-label="Interactive 3D model of room 136. Use the controls to change the layout and camera view."></div>
+      <div class="badge" id="badge"></div>
+      <div class="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</div>
+    </section>
+    <aside class="panel">
+      <div class="group">
+        <h2>Layout</h2>
+        <div class="seg" id="modes">
+          <button type="button" data-mode="class" aria-pressed="true">Class</button>
+          <button type="button" data-mode="bleach" aria-pressed="false">Class + bleachers out</button>
+          <button type="button" data-mode="comp" aria-pressed="false">Competition</button>
+          <button type="button" data-mode="pres" aria-pressed="false">Presentation</button>
+          <button type="button" data-mode="presb" aria-pressed="false">Presentation + bleachers out</button>
+        </div>
+        <p class="desc" id="desc"></p>
+      </div>
+      <div class="group">
+        <h2>Camera</h2>
+        <div class="chips" id="views">
+          <button type="button" data-view="corner" aria-pressed="true">Corner</button>
+          <button type="button" data-view="top" aria-pressed="false">Top down</button>
+          <button type="button" data-view="side" aria-pressed="false">Side profile</button>
+          <button type="button" data-view="bleachers" aria-pressed="false">From the bleachers</button>
+          <button type="button" data-view="facing" aria-pressed="false">Facing the bleachers</button>
+          <button type="button" data-view="teacher" aria-pressed="false">Teacher desk</button>
+          <button type="button" data-view="student" aria-pressed="false">Student seat</button>
+          <button type="button" data-view="server" aria-pressed="false">Server room</button>
+        </div>
+      </div>
+      <div class="group">
+        <h2>Show</h2>
+        <div class="toggles">
+          <label><input type="checkbox" id="t-bleachon" checked> Bleachers installed</label>
+          <label><input type="checkbox" id="t-bleach"> Bleachers out</label>
+          <label><input type="checkbox" id="t-people" checked> Students</label>
+          <label><input type="checkbox" id="t-cut" checked> Fade walls near the camera</label>
+          <label><input type="checkbox" id="t-boxes" checked> Floor boxes</label>
+          <label><input type="checkbox" id="t-cab" checked> South wall cabinets</label>
+          <label><input type="checkbox" id="t-demo"> Demo: remove the two 36 in. cabinets and the counter section from x = 92 in.</label>
+          <label><input type="checkbox" id="t-doors" checked> Door swing zones</label>
+        </div>
+      </div>
+      <div class="group">
+        <h2>This layout</h2>
+        <dl id="stats"></dl>
+      </div>
+      <p class="note">Wall, door and floor box positions come from the plan sheet and your measurements; the alcove is 194 in. long and the server room wall 130 in., as you gave them, with the door wall about 40 in. back from the south wall. Cabinets are as you gave them, all bifold: a tall 36 x 30 in. floor cabinet against the entry pier at the west end, then three wall cabinets (46, 36, 36 in. wide, 13 in. deep, 27 in. tall, tops 35 in. below the ceiling) west to east from about x 32. Assumptions: bleachers are 3 bays at 6 ft, 4 tiers, 3 seats per bay per tier, and they currently overlap the wall cabinets; the server room is 76 x 130 in. behind the alcove, with its door and window placed from your markup.</p>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  'use strict';
+  var host = document.getElementById('view');
+  if (!window.THREE || !THREE.OrbitControls) {
+    host.innerHTML = '<div class="fallback">The 3D viewer could not load. Check your connection and reload the page.</div>';
+    return;
+  }
+  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 400, D = 376, H = 120, T = 4;
+  var rad = function (d) { return d * Math.PI / 180; };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function angDiff(a, b) {
+    var d = (b - a) % (2 * Math.PI);
+    if (d > Math.PI) d -= 2 * Math.PI;
+    if (d < -Math.PI) d += 2 * Math.PI;
+    return d;
+  }
+  function std(color, o) {
+    var m = new THREE.MeshStandardMaterial(Object.assign({ color: color, roughness: 0.85, metalness: 0.05 }, o || {}));
+    return m;
+  }
+
+  /* ---------- renderer, camera, lights ---------- */
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  host.appendChild(renderer.domElement);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(42, 1, 8, 4000);
+  var controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.09;
+  controls.minDistance = 20;
+  controls.maxDistance = 1500;
+  controls.maxPolarAngle = 1.66;
+
+  function cssColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#D9DFE2'; }
+  function syncBackground() { try { scene.background = new THREE.Color(cssColor('--scene-bg')); } catch (e) { scene.background = new THREE.Color(0xd9dfe2); } }
+  syncBackground();
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x7f868c, 0.95));
+  var sun = new THREE.DirectionalLight(0xffffff, 0.7);
+  sun.position.set(430, 560, 90);
+  sun.target.position.set(200, 0, 188);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.left = -340; sun.shadow.camera.right = 340;
+  sun.shadow.camera.top = 340; sun.shadow.camera.bottom = -340;
+  sun.shadow.camera.near = 100; sun.shadow.camera.far = 1300;
+  sun.shadow.bias = -0.0006;
+  scene.add(sun); scene.add(sun.target);
+  var fill = new THREE.DirectionalLight(0xdbe4ff, 0.28);
+  fill.position.set(-250, 320, 520);
+  scene.add(fill);
+
+  /* ---------- floor ---------- */
+  (function floor() {
+    var c = document.createElement('canvas'); c.width = c.height = 128;
+    var g = c.getContext('2d');
+    g.fillStyle = '#C4C9CC'; g.fillRect(0, 0, 128, 128);
+    g.strokeStyle = 'rgba(40,48,54,0.16)'; g.lineWidth = 2; g.strokeRect(1, 1, 126, 126);
+    var tex = new THREE.CanvasTexture(c);
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1 / 24, 1 / 24);
+    tex.anisotropy = 4;
+    var s = new THREE.Shape();
+    s.moveTo(0, 0); s.lineTo(W, 0); s.lineTo(W, -D); s.lineTo(-5, -D); s.lineTo(-5, -324); s.lineTo(-76, -324); s.lineTo(-76, -130); s.lineTo(0, -130); s.lineTo(0, 0);
+    var geo = new THREE.ShapeGeometry(s);
+    geo.rotateX(-Math.PI / 2);
+    var m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }));
+    m.receiveShadow = true;
+    scene.add(m);
+  })();
+
+  /* ---------- walls with door openings ---------- */
+  var wallRecords = [];
+  function addWall(p1, p2, n, openings, thickness) {
+    var TT = thickness || T;
+    var rec = { p: new THREE.Vector3((p1[0] + p2[0]) / 2, 0, (p1[1] + p2[1]) / 2), n: new THREE.Vector3(n[0], 0, n[1]), mats: [], cur: 1 };
+    var wm = new THREE.MeshStandardMaterial({ color: 0xE9E6E0, roughness: 0.95, transparent: true });
+    var dm = new THREE.MeshStandardMaterial({ color: 0xA67A4C, roughness: 0.7, transparent: true });
+    var gm = new THREE.MeshStandardMaterial({ color: 0x9FC6D9, roughness: 0.1, metalness: 0.1, transparent: true, opacity: 0.25, depthWrite: false });
+    rec.mats.push(wm, dm); rec.glass = [gm];
+    wallRecords.push(rec);
+    var dx = p2[0] - p1[0], dz = p2[1] - p1[1];
+    var L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L;
+    var phi = Math.atan2(-uz, ux);
+    function seg(a, b, y0, y1, mat, thick) {
+      if (b - a < 0.1) return;
+      var mesh = new THREE.Mesh(new THREE.BoxGeometry(b - a, y1 - y0, thick), mat);
+      var mid = (a + b) / 2;
+      mesh.position.set(p1[0] + ux * mid + n[0] * thick / 2, (y0 + y1) / 2, p1[1] + uz * mid + n[1] * thick / 2);
+      mesh.rotation.y = phi;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+    }
+    var cursor = 0;
+    (openings || []).forEach(function (o) {
+      seg(cursor, o.a, 0, H, wm, TT);
+      if (o.window) {
+        seg(o.a, o.b, 0, o.sill, wm, TT);
+        seg(o.a, o.b, o.head, H, wm, TT);
+        seg(o.a, o.b, o.sill, o.head, gm, 0.8);
+      } else {
+        seg(o.a, o.b, 84, H, wm, TT);
+        if (!o.noLeaf) seg(o.a + 1, o.b - 1, 0, 82, dm, 1.8);
+      }
+      cursor = o.b;
+    });
+    seg(cursor, L, 0, H, wm, TT);
+    return rec;
+  }
+  addWall([0, 0], [W, 0], [0, -1], [{ a: 360, b: 396 }]);
+  addWall([W, 0], [W, D], [1, 0], [{ a: 312, b: 348 }]);
+  var southWall = addWall([W, D], [-24, D], [0, 1], []);
+  /* the alcove is 194 in. long (z 130 to 324); door 413A (x -61 to -25) is set into the wall at its south end, about 40 in. back from the south wall */
+  addWall([-76, 324], [-5, 324], [0, 1], [{ a: 15, b: 51, noLeaf: true }], 9.5);   /* door wall, 9.5 in. thick so it meets the pier */
+  addWall([-76, 333.5], [-76, 130], [-1, 0], []);
+  (function () {
+    var pier = new THREE.Mesh(new THREE.BoxGeometry(19, H, 42.5), southWall.mats[0]);   /* shares the south wall material so it fades with it */
+    pier.position.set(-14.5, H / 2, 354.75); pier.receiveShadow = true; scene.add(pier);
+  })();
+  var srvWall = addWall([-76, 130], [0, 130], [0, -1], [{ a: 8, b: 44, noLeaf: true }]);   /* door to the server room, x -68 to -32 */
+  addWall([0, 130], [0, 0], [-1, 0], [{ a: 12, b: 110, window: true, sill: 48, head: 96 }]); /* window into the server room, z 20 to 118 */
+  /* the server room's north and west walls are left out on purpose */
+  /* server room floor and the swinging door leaf (hinged on the west jamb, opens into the alcove) */
+  (function () {
+    var geo = new THREE.PlaneGeometry(76, 130); geo.rotateX(-Math.PI / 2);
+    var f = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0xA3ABB0, roughness: 0.95 }));
+    f.position.set(-38, 0.05, 65); f.receiveShadow = true; scene.add(f);
+  })();
+  var srv = { pivot: new THREE.Group(), a: 0, target: 0 };
+  (function () {
+    var leaf = new THREE.Mesh(new THREE.BoxGeometry(34, 82, 1.8), srvWall.mats[1]);
+    leaf.position.set(17, 41, 0); leaf.castShadow = true;
+    srv.pivot.add(leaf); srv.pivot.position.set(-67, 0, 128); scene.add(srv.pivot);
+  })();
+
+  /* entry door leaf at the south end of the alcove (hinged on the west jamb, swings into the alcove) */
+  var ent = { pivot: new THREE.Group(), a: 0, target: 0 };
+  (function () {
+    var leaf = new THREE.Mesh(new THREE.BoxGeometry(34, 82, 1.8), srvWall.mats[1]);
+    leaf.position.set(17, 41, 0); leaf.castShadow = true;
+    ent.pivot.add(leaf); ent.pivot.position.set(-60, 0, 324.9); scene.add(ent.pivot);
+  })();
+
+  /* ---------- south wall cabinets (three wall cabinets 46, 36 and 36 in. wide, 13 in. deep, 27 in. tall, west to east from x 32; and a tall floor cabinet 36 x 30 in. at the west end, against the entry pier; all fronts are bifold) ---------- */
+  var cabGroup = new THREE.Group(); scene.add(cabGroup);
+  var demoCabs = [];   /* the two 36 in. wall cabinets that may come out */
+  (function () {
+    /* bifold fronts: two doors per unit with one center seam and pulls at the joint */
+    function frontTex(w, h) {
+      var k = 6, c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+      var g = c.getContext('2d'), cw = c.width, ch = c.height;
+      g.fillStyle = '#C39B66'; g.fillRect(0, 0, cw, ch);
+      g.strokeStyle = 'rgba(70,44,20,0.7)'; g.lineWidth = 2; g.strokeRect(1, 1, cw - 2, ch - 2);
+      g.beginPath(); g.moveTo(cw / 2, 0); g.lineTo(cw / 2, ch); g.stroke();
+      g.fillStyle = '#5E4024';
+      [cw / 2 - 7, cw / 2 + 7].forEach(function (x) { g.beginPath(); g.arc(x, ch / 2, 3, 0, 7); g.fill(); });
+      return new THREE.CanvasTexture(c);
+    }
+    function cab(x0, x1, zf, h, y0) {
+      var w = x1 - x0, d = 376 - zf, body = std(0xB58C57);
+      var mats = [body, body, body, body, body, new THREE.MeshStandardMaterial({ map: frontTex(w, h), roughness: 0.8 })];
+      var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mats);
+      m.position.set((x0 + x1) / 2, y0 + h / 2, (zf + 376) / 2);
+      m.castShadow = true; m.receiveShadow = true; cabGroup.add(m); return m;
+    }
+    cab(32, 78, 363, 27, 58); demoCabs.push(cab(78, 114, 363, 27, 58), cab(114, 150, 363, 27, 58)); cab(-5, 31, 346, 85, 0);
+    /* countertop along the south wall: starts at the east side of the tall cabinet (x 31) and runs 145 in. east to x 176; top 24 in. above the floor; depth of 24 in. is assumed. The part from x 92 on sits in the bleacher footprint and comes out in demo. */
+    function counter(x0, x1) {
+      var g = new THREE.Group(), w = x1 - x0, d = 24;
+      var slab = new THREE.Mesh(new THREE.BoxGeometry(w, 1.5, d), std(0xCFCAC0, { roughness: 0.55 }));
+      slab.position.set((x0 + x1) / 2, 23.25, 376 - d / 2); g.add(slab);
+      [x0 + 0.75, x1 - 0.75].forEach(function (x) {
+        var leg = new THREE.Mesh(new THREE.BoxGeometry(1.5, 22.5, d - 2), std(0xB58C57));
+        leg.position.set(x, 11.25, 376 - d / 2); g.add(leg);
+      });
+      g.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+      cabGroup.add(g); return g;
+    }
+    counter(31, 92); demoCabs.push(counter(92, 176));   /* wall cabinets: tops 35 in. below the 10 ft ceiling, so 58 to 85 in. up */
+  })();
+
+  /* ---------- floor boxes and door zones ---------- */
+  var boxGroup = new THREE.Group(); scene.add(boxGroup);
+  var boxGeo = new THREE.CylinderGeometry(4.5, 4.5, 0.5, 20);
+  var boxMat = new THREE.MeshBasicMaterial({ color: 0xFF7A3D });
+  [114, 186, 258, 330].forEach(function (x) {
+    [92, 240].forEach(function (z) {
+      var b = new THREE.Mesh(boxGeo, boxMat); b.position.set(x, 0.3, z); boxGroup.add(b);
+    });
+  });
+  var doorGroup = new THREE.Group(); scene.add(doorGroup);
+  [[360, 0, 396, 36], [364, 312, 400, 348]].forEach(function (r) {
+    var pts = [new THREE.Vector3(r[0], 0.4, r[1]), new THREE.Vector3(r[2], 0.4, r[1]), new THREE.Vector3(r[2], 0.4, r[3]), new THREE.Vector3(r[0], 0.4, r[3])];
+    var l = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xE0453A }));
+    doorGroup.add(l);
+  });
+
+  /* ---------- TVs on the north wall ---------- */
+  var tvs = [];
+  (function () {
+    var tw = 74.1, th = 41.7;
+    for (var i = 0; i < 3; i++) {
+      var c = document.createElement('canvas'); c.width = 512; c.height = 288;
+      var tex = new THREE.CanvasTexture(c);
+      var g = new THREE.Group();
+      g.position.set(200 + (i - 1) * (tw + 12), 70, 1.1);
+      var bez = new THREE.Mesh(new THREE.BoxGeometry(tw + 1.2, th + 1.2, 1.8), std(0x0C0E10, { roughness: 0.4 }));
+      g.add(bez);
+      var scr = new THREE.Mesh(new THREE.PlaneGeometry(tw, th), new THREE.MeshBasicMaterial({ map: tex }));
+      scr.position.z = 0.95;
+      g.add(scr);
+      scene.add(g);
+      tvs.push({ canvas: c, tex: tex });
+    }
+  })();
+  function drawTV(i, title, sub, hue) {
+    var t = tvs[i], c = t.canvas, g = c.getContext('2d');
+    var grd = g.createLinearGradient(0, 0, 512, 288);
+    grd.addColorStop(0, 'hsl(' + hue + ',55%,22%)');
+    grd.addColorStop(1, 'hsl(' + (hue + 30) + ',60%,10%)');
+    g.fillStyle = grd; g.fillRect(0, 0, 512, 288);
+    g.fillStyle = 'rgba(255,255,255,0.08)';
+    for (var k = 0; k < 6; k++) g.fillRect(28, 150 + k * 18, 456 - (k % 3) * 90, 6);
+    g.fillStyle = '#fff';
+    g.font = '600 46px "Barlow Semi Condensed", Arial, sans-serif';
+    g.textBaseline = 'alphabetic';
+    g.fillText(title, 28, 78);
+    g.fillStyle = 'rgba(255,255,255,0.7)';
+    g.font = '400 24px "IBM Plex Mono", monospace';
+    g.fillText(sub, 28, 114);
+    g.fillStyle = 'rgba(255,255,255,0.55)';
+    g.font = '400 18px "IBM Plex Mono", monospace';
+    g.fillText('85"  TV ' + (i + 1) + ' of 3', 28, 262);
+    t.tex.needsUpdate = true;
+  }
+
+  /* ---------- desk, chair, student, monitor ---------- */
+  var G = {
+    top: new THREE.BoxGeometry(70, 1.5, 30),
+    side: new THREE.BoxGeometry(1.5, 23, 24),
+    modesty: new THREE.BoxGeometry(66, 11, 0.8),
+    caster: new THREE.CylinderGeometry(1.5, 1.5, 3, 10),
+    seat: new THREE.BoxGeometry(17, 2.5, 17),
+    back: new THREE.BoxGeometry(16, 14, 2),
+    post: new THREE.CylinderGeometry(1, 1, 12, 8),
+    base: new THREE.CylinderGeometry(8, 8, 1.2, 12),
+    torso: new THREE.BoxGeometry(14, 19, 8),
+    head: new THREE.SphereGeometry(4.6, 14, 10),
+    thigh: new THREE.BoxGeometry(11, 5, 15),
+    shin: new THREE.BoxGeometry(4.5, 16, 4.5),
+    arm: new THREE.BoxGeometry(3.5, 3.5, 15),
+    monBase: new THREE.BoxGeometry(8, 0.6, 6),
+    monNeck: new THREE.BoxGeometry(1.6, 6, 1.2),
+    monPanel: new THREE.BoxGeometry(21.5, 12.5, 1),
+    monScreen: new THREE.PlaneGeometry(20.3, 11.3),
+    kb: new THREE.BoxGeometry(16, 0.7, 5.5)
+  };
+  var MT = {
+    top: std(0xCBC7BF), teacherTop: std(0xB98B52), frame: std(0x2B3034, { metalness: 0.3 }),
+    caster: std(0x101214), chair: std(0x23282C), mon: std(0x0E1012), kb: std(0x2A2E31),
+    pants: std(0x333A47), shirts: [0x5B7FA6, 0xA65B5B, 0x6FA672, 0xC9A24A, 0x7E6BA8, 0x4F9AA3, 0xD0D4D8].map(function (c) { return std(c); }),
+    skins: [0xE0B896, 0xC68E66, 0x8D5A3B, 0xF1D2B5].map(function (c) { return std(c); }),
+    teacherShirt: std(0x2F6F5E)
+  };
+  var screenMats = [
+    new THREE.MeshBasicMaterial({ color: 0xFF8A4D }),
+    new THREE.MeshBasicMaterial({ color: 0x35C2B0 }),
+    new THREE.MeshBasicMaterial({ color: 0x8E7CFF }),
+    new THREE.MeshBasicMaterial({ color: 0x3F6FB5 })
+  ];
+  function mesh(geo, mat, x, y, z) { var m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); return m; }
+
+  var desks = [];
+var ALLSEATS = [];
+  var studentObjs = [];
+  var seedN = 0;
+  function makeFigure(teacher) {
+    var g = new THREE.Group();
+    var shirt = teacher ? MT.teacherShirt : MT.shirts[seedN % MT.shirts.length];
+    var skin = MT.skins[(seedN * 3 + 1) % MT.skins.length];
+    seedN++;
+    g.add(mesh(G.torso, shirt, 0, 28, -2));
+    g.add(mesh(G.head, skin, 0, 42, -1));
+    g.add(mesh(G.thigh, MT.pants, 0, 20.5, 6));
+    g.add(mesh(G.shin, MT.pants, -3, 10, 15));
+    g.add(mesh(G.shin, MT.pants, 3, 10, 15));
+    g.add(mesh(G.arm, shirt, -8.5, 30, 7));
+    g.add(mesh(G.arm, shirt, 8.5, 30, 7));
+    return g;
+  }
+  function makeChair() {
+    var g = new THREE.Group();
+    g.add(mesh(G.seat, MT.chair, 0, 17.5, 0));
+    g.add(mesh(G.back, MT.chair, 0, 26.5, -8.5));
+    g.add(mesh(G.post, MT.chair, 0, 10, 0));
+    g.add(mesh(G.base, MT.chair, 0, 2.6, 0));
+    return g;
+  }
+  function makeMonitor() {
+    var g = new THREE.Group();
+    g.add(mesh(G.monBase, MT.mon, 0, 30.3, 0));
+    g.add(mesh(G.monNeck, MT.mon, 0, 33.3, 0));
+    g.add(mesh(G.monPanel, MT.mon, 0, 42, 0));
+    var s = new THREE.Mesh(G.monScreen, screenMats[3]);
+    s.rotation.y = Math.PI; s.position.set(0, 42, -0.52);
+    g.add(s);
+    g.userData.screen = s;
+    return g;
+  }
+  function makeDesk(id, teacher, seats, withChair, withFigure) {
+    var g = new THREE.Group();
+    g.add(mesh(G.top, teacher ? MT.teacherTop : MT.top, 0, 29.25, 0));
+    g.add(mesh(G.side, MT.frame, -33, 16.5, 0));
+    g.add(mesh(G.side, MT.frame, 33, 16.5, 0));
+    g.add(mesh(G.modesty, MT.frame, 0, 21, 12));
+    [[-32, -11], [-32, 11], [32, -11], [32, 11]].forEach(function (p) { g.add(mesh(G.caster, MT.caster, p[0], 1.5, p[1])); });
+    var screens = [], seatObjs = [];
+    seats.forEach(function (sx) {
+      var mon = makeMonitor(); mon.position.set(sx, 0, 5); g.add(mon); screens.push(mon.userData.screen);
+      g.add(mesh(G.kb, MT.kb, sx, 30.4, -6));
+      if (withChair) {
+        var ch = makeChair(), fig = makeFigure(!!withFigure), unit = new THREE.Group();
+        unit.add(ch); unit.add(fig); scene.add(unit);
+        unit.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+        var so = { chair: ch, fig: fig, unit: unit, sx: sx, lz: -29, free: false, di: id, path: null };
+        studentObjs.push(fig); seatObjs.push(so); ALLSEATS.push(so);
+      }
+    });
+    g.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    scene.add(g);
+    desks.push({ id: id, group: g, screens: screens, seats: seatObjs });
+    return g;
+  }
+  for (var i = 0; i < 12; i++) makeDesk(i, false, [-17.5, 17.5], true, false);
+  makeDesk(12, true, [0], true, true);
+
+  /* ---------- bleachers: three 6 ft bays, four tiers, slide out ---------- */
+  var bleach = { p: 0, target: 0, tiers: [] };
+  (function () {
+    var deckMat = std(0xB4B9BD);
+    var seatMat = std(0x2C4C7C);
+    var deckGeo = new THREE.BoxGeometry(1, 1, 1);
+    var cSeat = new THREE.BoxGeometry(18, 2, 16);
+    var cBack = new THREE.BoxGeometry(18, 15, 2);
+    var cLeg = new THREE.BoxGeometry(2, 15, 14);
+    for (var t = 0; t < 4; t++) {
+      for (var b = 0; b < 3; b++) {
+        var cx = 200 + (b - 1) * 72;
+        var tg = new THREE.Group();
+        tg.position.x = cx;
+        var deck = new THREE.Mesh(deckGeo, deckMat);
+        deck.castShadow = true; deck.receiveShadow = true;
+        tg.add(deck);
+        var chairs = [];
+        for (var s = -1; s <= 1; s++) {
+          var c = new THREE.Group();
+          c.rotation.y = Math.PI;
+          c.add(mesh(cSeat, seatMat, 0, 16, 0));
+          c.add(mesh(cBack, seatMat, 0, 24.5, -9));
+          c.add(mesh(cLeg, MT.frame, -8, 8, 0));
+          c.add(mesh(cLeg, MT.frame, 8, 8, 0));
+          c.position.set(s * 24, 0, 0);
+          c.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+          tg.add(c); chairs.push(c);
+        }
+        scene.add(tg);
+        bleach.tiers.push({ i: t, group: tg, deck: deck, chairs: chairs, h: 14 + 10 * t });
+      }
+    }
+  })();
+  function setBleachers(p) {
+    var e = ease(clamp(p, 0, 1));
+    var cp = clamp((e - 0.55) / 0.45, 0, 1);
+    bleach.tiers.forEach(function (t) {
+      var d = lerp(7, 24, e);
+      var zf = lerp(348 + 7 * t.i, 280 + 24 * t.i, e);
+      t.group.position.z = zf + d / 2;
+      t.deck.scale.set(71, t.h, d);
+      t.deck.position.y = t.h / 2;
+      t.chairs.forEach(function (c) { c.visible = cp > 0.01; c.scale.setScalar(Math.max(cp, 0.001)); c.position.y = t.h; });
+    });
+  }
+  setBleachers(0);
+
+  /* ---------- poses ---------- */
+/* ids 0-2 west column, 3-5 center stack (west half), 6-8 center stack (east half), 9-11 east column, 12 teacher */
+var TEACHER_T = { x: 200, z: 261, rot: Math.PI };      /* class: T'd onto the south end of the center stack */
+var TEACHER_A = { x: -12, z: 165, rot: rad(90) };     /* alcove, north end, beside the server room door */
+var TEACHER_VIA = [{ x: 40, z: 262, rot: Math.PI }];  /* path between the two, south of the west column */
+var SERVER = { rows: [16, 46, 76, 106], px: -40 };    /* assumed 76 x 130 in. room behind the alcove */
+function classPoses(side) {
+  var a = [], sx = [60, 185, 215, 340], rot = [-90, 90, -90, 90];
+  for (var s = 0; s < 4; s++) for (var j = 0; j < 3; j++) a.push({ x: sx[s], z: 71 + 70 * j, rot: rad(rot[s]) });
+  a.push(side ? { x: TEACHER_A.x, z: TEACHER_A.z, rot: TEACHER_A.rot, via: TEACHER_VIA, dur: 2600 } : { x: TEACHER_T.x, z: TEACHER_T.z, rot: TEACHER_T.rot });   /* side: out of the way of the bleachers */
+  return a;
+}
+function compPoses() {
+  var a = [], i;
+  for (i = 0; i < 13; i++) a.push(null);
+  var rows = [-70, 0, 70];   /* three desks side by side along each team row */
+  [{ ids: [3, 4, 5], cx: 106, cz: 140, phi: rad(56) }, { ids: [6, 7, 8], cx: 294, cz: 140, phi: -rad(56) }].forEach(function (p) {
+    p.ids.forEach(function (id, k) { a[id] = { x: p.cx + rows[k] * Math.cos(p.phi), z: p.cz - rows[k] * Math.sin(p.phi), rot: p.phi }; });
+  });
+  a[12] = { x: TEACHER_A.x, z: TEACHER_A.z, rot: TEACHER_A.rot, via: TEACHER_VIA, dur: 2600 };
+  /* the six extra desks roll through the alcove and the server room door; the last two park on top of the first two */
+  var lead = [{ x: 10, z: 255, rot: 0 }, { x: -50, z: 255, rot: rad(90) }, { x: -50, z: 160, rot: rad(90) }];
+  [9, 10, 11, 0, 1, 2].forEach(function (id, k) {
+    var up = k >= 4 ? 31 : 0, row = SERVER.rows[k % 4];
+    var via = lead.slice();
+    via.push({ x: -50, z: 130, rot: rad(90), y: up });
+    via.push({ x: -50, z: row, rot: rad(90), y: up });
+    a[id] = { x: SERVER.px, z: row, rot: 0, y: up, gone: true, k: k, via: via, delay: k * 600, dur: 4200 };
+  });
+  return a;
+}
+function loc(p, lx, lz) {
+  return [p.x + lx * Math.cos(p.rot) + lz * Math.sin(p.rot), p.z - lx * Math.sin(p.rot) + lz * Math.cos(p.rot)];
+}
+
+function presPoses() {
+  var order = [12, 2, 5, 8, 11, 1, 4, 7, 10, 0, 3, 6, 9], a = [], i;
+  var via = [{ x: 10, z: 255, rot: 0 }, { x: -50, z: 255, rot: rad(90) }, { x: -50, z: 160, rot: rad(90) }, { x: -50, z: 128, rot: rad(90) }, { x: -50, z: 70, rot: rad(90) }];
+  for (i = 0; i < 13; i++) a.push(null);
+  order.forEach(function (id, k) { a[id] = { x: -50, z: 30, rot: rad(90), gone: true, nodoor: true, hide: true, k: k, kmax: 12, via: via, delay: k * 520, dur: 3400 }; });
+  return a;
+}
+function presSeats(z0) {
+  var cp = classPoses(), L = [], out = new Array(25), r;
+  for (var d = 0; d < 12; d++) [-17.5, 17.5].forEach(function (sx) { var w = loc(cp[d], sx, -29); L.push({ k: L.length, x: w[0], z: w[1] }); });
+  L.sort(function (a, b) { return a.z - b.z; });
+  for (r = 0; r < 3; r++) {
+    L.slice(r * 8, r * 8 + 8).sort(function (a, b) { return a.x - b.x; }).forEach(function (s, c) { out[s.k] = { x: 200 + (c - 3.5) * 36, z: (z0 || 150) + r * 40, rot: Math.PI }; });
+  }
+  out[24] = null;   /* the teacher chair leaves with the teacher desk */
+  return out;
+}
+var TVS_CLASS = [['Lesson slides', 'teacher display', 210], ['Shared screen', 'student demo', 190], ['Announcements', 'bell schedule', 230]];
+var MODES = {
+  'class': {
+    bleach: 0, poses: classPoses(), tv: TVS_CLASS,
+    desc: 'Standard setup: a back-to-back stack of 2x3 down the center, a 1x3 column on each side, and your desk T-d onto the south end of the stack. Students sit on the aisle sides with their backs to the room, so you can see everyone from the T. Bleachers stay folded.',
+    stats: [['Student seats', '24'], ['Desks', '12 + 1 teacher'], ['Between chair backs', '48 in.'], ['Side walls', '45 in.'], ['North wall', '36 in.']]
+  },
+  bleach: {
+    bleach: 1, poses: classPoses(true), tv: TVS_CLASS,
+    desc: 'The same class layout with the three bleacher bays slid out facing the TVs. Your desk rolls over to the alcove, by the server room door, to clear the front tier, and rolls back to the center when the bleachers fold. The student stack stops 34 in. short of the tier.',
+    stats: [['Student seats', '24'], ['Bleacher seats', '36'], ['Teacher desk', 'alcove'], ['Gap to front tier', '34 in.']]
+  },
+  pres: {
+    bleach: 0, poses: presPoses(), seatPoses: presSeats(), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
+    desc: 'All 13 desks roll out through the northwest door, the server room door, and the 24 student chairs line up in three east-west rows of eight, facing the TVs. The teacher leaves with the teacher desk. The server room cannot hold 13 desks, so each one disappears as it arrives.',
+    stats: [['Chairs', '24 in 3 rows of 8'], ['Row spacing', '40 in.'], ['Seat spacing', '36 in.'], ['Front row to TV wall', '150 in.'], ['Side clearance', '65 in.'], ['Desks', 'all out, teacher too']]
+  },
+  presb: {
+    bleach: 1, poses: presPoses(), seatPoses: presSeats(120), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
+    desc: 'The presentation layout with the three bleacher bays slid out behind it. The desks and the teacher are gone, the 24 chairs sit in three east-west rows of eight up front, and the bleachers add a second audience tier behind them. The chair rows move 30 in. toward the TVs to leave a walking aisle.',
+    stats: [['Chairs', '24 in 3 rows of 8'], ['Bleacher seats', '36'], ['Front row to TV wall', '120 in.'], ['Last row to front tier', '80 in.'], ['Seat spacing', '36 in.']]
+  },
+  comp: {
+    bleach: 1, poses: compPoses(), tv: [['Team West', 'player view', 20], ['Live match', 'main feed', 170], ['Team East', 'player view', 270]],
+    desc: 'Six desks only, in two straight 1x3 rows angled 56 degrees to form a wedge that opens toward the bleachers. Players walk in from the front down the aisle between the teams and turn to their seats, and every screen points away from the other team. Your desk moves to the alcove, and the six extra student desks roll through the alcove into the server room.',
+    stats: [['Player seats', '12'], ['Student desks in room', '6 of 12'], ['Aisle between teams', '46 in.'], ['Spectator seats', '36'], ['Gap to side walls', '14 in.'], ['Gap to front tier', '45 in.']]
+  }
+};
+var VIEWS = {
+  corner: { pos: [-210, 300, 640], target: [200, 25, 170] },
+  top: { pos: [200, 780, 194], target: [200, 0, 188] },
+  side: { pos: [760, 150, 200], target: [160, 40, 200] },
+  bleachers: { pos: [200, 98, 352], target: [200, 46, 40], bleach: true },
+  facing: { pos: [200, 88, 16], target: [200, 40, 300], bleach: true },
+  teacher: function () {
+    if (mode !== 'class') return { pos: [-41, 58, 165], target: [200, 40, 140] };
+    return { pos: [200, 58, 291], target: [200, 40, 30] };
+  },
+  server: { pos: [-38, 235, 300], target: [-38, 10, 70] },
+  student: function () {
+    if (MODES[mode].seatPoses) { var sp = MODES[mode].seatPoses[10]; return { pos: [sp.x, 50, sp.z], target: [sp.x, 34, 0] }; }
+    var p = MODES[mode].poses[3], a = loc(p, -17.5, -29), b = loc(p, -17.5, 70);
+    return { pos: [a[0], 50, a[1]], target: [b[0], 34, b[1]] };
+  }
+};
+
+/* ---------- state, tweens ---------- */
+var cur = desks.map(function () { return { x: 0, y: 0, z: 0, rot: 0, gone: false, route: null, k: 0 }; });
+var mode = 'class';
+var tween = null, camTw = null;
+function writeDesk(i) {
+  var d = desks[i].group; d.position.set(cur[i].x, cur[i].y, cur[i].z); d.rotation.y = cur[i].rot;
+  syncSeats(i);
+}
+function applyTuck(i, t) {
+  desks[i].seats.forEach(function (s) {
+    if (s.free) return;
+    s.lz = lerp(-29, -9, t);
+    s.fig.scale.setScalar(Math.max(0.001, 1 - t));
+  });
+}
+function syncSeats(i) {
+  var c = cur[i];
+  desks[i].seats.forEach(function (s) {
+    if (s.free) return;
+    var w = loc(c, s.sx, s.lz);
+    s.unit.position.set(w[0], c.y, w[1]); s.unit.rotation.y = c.rot;
+  });
+}
+function placeSeat(s, path, u) {
+  var d = u * path.total, j = 1;
+  while (j < path.cum.length - 1 && path.cum[j] < d) j++;
+  var a = path.pts[j - 1], b = path.pts[j];
+  var f = clamp((d - path.cum[j - 1]) / (path.cum[j] - path.cum[j - 1]), 0, 1);
+  s.unit.position.set(lerp(a.x, b.x, f), lerp(a.y, b.y, f), lerp(a.z, b.z, f));
+  s.unit.rotation.y = a.rot + angDiff(a.rot, b.rot) * f;
+  s.fig.scale.setScalar(Math.max(0.001, 1 - lerp(path.tuck0, path.tuck1, u)));
+}
+function buildPath(f, t, route) {
+  var pts = [{ x: f.x, y: f.y || 0, z: f.z, rot: f.rot }];
+  (route || []).forEach(function (v) { pts.push({ x: v.x, y: v.y || 0, z: v.z, rot: v.rot }); });
+  pts.push({ x: t.x, y: t.y || 0, z: t.z, rot: t.rot });
+  var cum = [0];
+  for (var i = 1; i < pts.length; i++) {
+    var a = pts[i - 1], b = pts[i];
+    cum.push(cum[i - 1] + Math.hypot(b.x - a.x, b.z - a.z) + Math.abs(b.y - a.y) * 0.6 + Math.abs(angDiff(a.rot, b.rot)) * 18 + 0.01);
+  }
+  return { pts: pts, cum: cum, total: cum[cum.length - 1], routed: !!(route && route.length), tuck0: f.tuck || 0, tuck1: t.tuck || 0 };
+}
+function placeOnPath(i, path, u) {
+  var s = u * path.total, j = 1;
+  while (j < path.cum.length - 1 && path.cum[j] < s) j++;
+  var a = path.pts[j - 1], b = path.pts[j];
+  var f = clamp((s - path.cum[j - 1]) / (path.cum[j] - path.cum[j - 1]), 0, 1);
+  cur[i].x = lerp(a.x, b.x, f); cur[i].y = lerp(a.y, b.y, f); cur[i].z = lerp(a.z, b.z, f);
+  cur[i].rot = a.rot + angDiff(a.rot, b.rot) * f;
+  applyTuck(i, Math.max(path.routed ? clamp(Math.min(u, 1 - u) / 0.07, 0, 1) : 0, lerp(path.tuck0, path.tuck1, u)));
+}
+function setMode(name, instant) {
+  var m = MODES[name]; mode = name;
+  var quick = instant || REDUCED, usesDoor = false, usesEntry = false, total = 0;
+  desks.forEach(function (d) { d.group.visible = true; });
+  ALLSEATS.forEach(function (s) { s.unit.visible = true; });
+  var items = m.poses.map(function (p, i) {
+    var f = cur[i], route = null, delay = p.delay || 0, dur = p.dur || 1800;
+    if (p.via) {
+      route = p.via;
+      if (f.gone && f.route) {
+        var rv = f.route.slice().reverse();
+        if (f.nodoor) route = rv.concat(p.via);   /* parked out of sight by the presentation: back out the door, then on to the new pose */
+        else if (p.nodoor) route = null;           /* already inside the server room: stay there */
+      }
+    } else if (f.route) {
+      route = f.route.slice().reverse();
+      if (f.gone) {
+        if (f.nodoor) { dur = 3400; delay = ((f.kmax || 0) - (f.k || 0)) * 520; } else { dur = 4200; delay = (5 - (f.k || 0)) * 600; }
+      } else dur = 2600;
+    }
+    if (route && Math.hypot(f.x - p.x, f.z - p.z) < 1) route = null;   /* already there: no detour */
+    if (quick) { delay = 0; dur = 1; }
+    if (route && (p.gone || f.gone)) usesDoor = true;
+    total = Math.max(total, delay + dur);
+    return { path: buildPath({ x: f.x, y: f.y, z: f.z, rot: f.rot, tuck: f.tuck }, p, route), to: p, delay: delay, dur: dur };
+  });
+  ALLSEATS.forEach(function (s, k) {
+    var di = s.di, u = s.unit, to = null, route = null, delay = 0, dur = 2400;
+    var from = { x: u.position.x, y: u.position.y, z: u.position.z, rot: u.rotation.y, tuck: Math.max(0, 1 - s.fig.scale.x) };
+    if (m.seatPoses) {
+      var sp = m.seatPoses[k];
+      if (sp) to = { x: sp.x, y: 0, z: sp.z, rot: sp.rot, tuck: 0 };
+      if (!sp) { /* follows its desk */ }
+      else if (!s.free) {
+        if (cur[di].gone && cur[di].route) { route = cur[di].route.slice().reverse(); delay = items[di].delay; dur = 3400; }
+        else { delay = 2200 + (k % 8) * 60; dur = 2600; }
+      } else { delay = 200 + (k % 8) * 60; dur = 2600; }
+      if (sp) s.free = true;
+    } else if (s.free) {
+      var tp = m.poses[di], w = loc(tp, s.sx, -29);
+      to = { x: w[0], y: tp.y || 0, z: w[1], rot: tp.rot, tuck: 0 };
+      route = tp.via || null; delay = items[di].delay; dur = items[di].dur;
+    }
+    if (quick) { delay = 0; dur = 1; }
+    if (to && route && Math.hypot(from.x - to.x, from.z - to.z) < 1) route = null;
+    if (to) total = Math.max(total, delay + dur);
+    s.path = to ? { path: buildPath(from, to, route), delay: delay, dur: dur } : null;
+  });
+  tween = { t0: performance.now(), items: items, total: total, door: usesDoor && !quick, entry: usesEntry && !quick, unfreeze: !m.seatPoses };
+  bleach.target = m.bleach;
+  if (quick) bleach.p = m.bleach;
+  var cb = document.getElementById('t-bleach');
+  cb.checked = !!m.bleach;
+  desks.forEach(function (d) {
+    var sm = screenMats[3];
+    if (name === 'comp' && d.id >= 3 && d.id <= 5) sm = screenMats[0];
+    if (name === 'comp' && d.id >= 6 && d.id <= 8) sm = screenMats[1];
+    d.screens.forEach(function (s) { s.material = sm; });
+  });
+  m.tv.forEach(function (t, i) { drawTV(i, t[0], t[1], t[2]); });
+  document.getElementById('desc').textContent = m.desc;
+  var dl = document.getElementById('stats'); dl.innerHTML = '';
+  m.stats.forEach(function (s) {
+    var dt = document.createElement('dt'); dt.textContent = s[0];
+    var dd = document.createElement('dd'); dd.textContent = s[1];
+    dl.appendChild(dt); dl.appendChild(dd);
+  });
+  document.querySelectorAll('#modes button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.mode === name ? 'true' : 'false'); });
+  document.getElementById('badge').textContent = { 'class': 'CLASS', bleach: 'CLASS + BLEACHERS', comp: 'COMPETITION', pres: 'PRESENTATION', presb: 'PRESENTATION + BLEACHERS' }[name];
+}
+function setView(name, instant) {
+  var v = VIEWS[name]; if (!v) return;
+  if (typeof v === 'function') v = v();
+  if (v.bleach && bleach.target < 1) { bleach.target = 1; document.getElementById('t-bleach').checked = true; }
+  var dur = (instant || REDUCED) ? 1 : 1200;
+  camTw = { t0: performance.now(), dur: dur, p0: camera.position.clone(), g0: controls.target.clone(), p1: new THREE.Vector3(v.pos[0], v.pos[1], v.pos[2]), g1: new THREE.Vector3(v.target[0], v.target[1], v.target[2]) };
+  document.querySelectorAll('#views button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.view === name ? 'true' : 'false'); });
+}
+controls.addEventListener('start', function () {
+    camTw = null;
+    document.querySelectorAll('#views button').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+  });
+
+  /* ---------- UI wiring ---------- */
+  document.querySelectorAll('#modes button').forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode, false); }); });
+  document.querySelectorAll('#views button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.view, false); }); });
+  document.getElementById('t-bleach').addEventListener('change', function (e) { bleach.target = e.target.checked ? 1 : 0; });
+  document.getElementById('t-bleachon').addEventListener('change', function (e) {
+    var on = e.target.checked;
+    bleach.tiers.forEach(function (t) { t.group.visible = on; });
+    document.getElementById('t-bleach').disabled = !on;
+  });
+  document.getElementById('t-people').addEventListener('change', function (e) { studentObjs.forEach(function (o) { o.visible = e.target.checked; }); });
+  var cutOn = true;
+  document.getElementById('t-cut').addEventListener('change', function (e) { cutOn = e.target.checked; });
+  document.getElementById('t-boxes').addEventListener('change', function (e) { boxGroup.visible = e.target.checked; });
+  document.getElementById('t-cab').addEventListener('change', function (e) { cabGroup.visible = e.target.checked; });
+  document.getElementById('t-demo').addEventListener('change', function (e) { demoCabs.forEach(function (m) { m.visible = !e.target.checked; }); });
+  document.getElementById('t-doors').addEventListener('change', function (e) { doorGroup.visible = e.target.checked; });
+
+  /* ---------- resize ---------- */
+  function resize() {
+    var w = host.clientWidth || 600, h = host.clientHeight || 480;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(host); else window.addEventListener('resize', resize);
+  resize();
+
+  /* ---------- loop ---------- */
+  var last = performance.now(), frame = 0;
+  function tick(now) {
+    requestAnimationFrame(tick);
+    if (document.hidden) { last = now; return; }
+    var dt = Math.min((now - last) / 1000, 0.1); last = now;
+    frame++;
+    if (frame % 40 === 0) syncBackground();
+
+    if (tween) {
+      var el = now - tween.t0;
+      for (var i = 0; i < desks.length; i++) {
+        var it = tween.items[i];
+        var k = clamp((el - it.delay) / it.dur, 0, 1);
+        placeOnPath(i, it.path, ease(k));
+        if (k >= 1) { cur[i].gone = !!it.to.gone; cur[i].route = it.to.via || null; cur[i].k = it.to.k || 0; cur[i].tuck = it.to.tuck || 0; cur[i].nodoor = !!it.to.nodoor; cur[i].kmax = it.to.kmax || 0; desks[i].group.visible = !it.to.hide; desks[i].seats.forEach(function (s) { if (!s.free) s.unit.visible = !it.to.hide; }); }
+        writeDesk(i);
+      }
+      ALLSEATS.forEach(function (s) {
+        if (!s.path) return;
+        placeSeat(s, s.path.path, ease(clamp((el - s.path.delay) / s.path.dur, 0, 1)));
+      });
+      srv.target = tween.door ? 1 : 0;
+      ent.target = tween.entry ? 1 : 0;
+      if (el >= tween.total) {
+        if (tween.unfreeze) {
+          ALLSEATS.forEach(function (s) { s.free = false; s.lz = -29; s.path = null; s.fig.scale.setScalar(1); });
+          for (var q2 = 0; q2 < desks.length; q2++) syncSeats(q2);
+        }
+        tween = null; srv.target = 0; ent.target = 0;
+      }
+    }
+    srv.a += (srv.target - srv.a) * Math.min(1, dt * 3.5);
+    srv.pivot.rotation.y = -(Math.PI / 2) * srv.a;
+    ent.a += (ent.target - ent.a) * Math.min(1, dt * 3.5);
+    ent.pivot.rotation.y = (Math.PI / 2) * ent.a;
+    var dp = bleach.target - bleach.p;
+    if (Math.abs(dp) > 0.0005) { bleach.p += Math.sign(dp) * Math.min(Math.abs(dp), dt / 1.7); setBleachers(bleach.p); }
+
+    if (camTw) {
+      var kc = ease(clamp((now - camTw.t0) / camTw.dur, 0, 1));
+      camera.position.lerpVectors(camTw.p0, camTw.p1, kc);
+      controls.target.lerpVectors(camTw.g0, camTw.g1, kc);
+      if (kc >= 1) camTw = null;
+    }
+    controls.update();
+
+    wallRecords.forEach(function (w) {
+      var outside = (camera.position.x - w.p.x) * w.n.x + (camera.position.z - w.p.z) * w.n.z > 0;
+      var goal = (cutOn && outside) ? 0.08 : 1;
+      w.cur += (goal - w.cur) * Math.min(1, dt * 7);
+      w.mats.forEach(function (m) { m.opacity = w.cur; m.depthWrite = w.cur > 0.95; });
+      (w.glass || []).forEach(function (m) { m.opacity = 0.25 * w.cur; });
+    });
+    renderer.render(scene, camera);
+  }
+
+  /* initial state */
+  for (var q = 0; q < desks.length; q++) { var p0 = MODES['class'].poses[q]; cur[q] = { x: p0.x, y: 0, z: p0.z, rot: p0.rot, gone: false, route: null, k: 0 }; writeDesk(q); }
+  setMode('class', true);
+  bleach.p = 0; setBleachers(0);
+  var v0 = VIEWS.corner;
+  camera.position.set(v0.pos[0], v0.pos[1], v0.pos[2]);
+  controls.target.set(v0.target[0], v0.target[1], v0.target[2]);
+  controls.update();
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</html>
