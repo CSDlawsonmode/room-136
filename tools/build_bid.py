@@ -25,7 +25,7 @@ E.append(P("Caldwell High School is converting Room 136 (called Room 413 in some
 E.append(P("What the district already has", H2))
 E.append(table([
     ["Item", "Status", "Approx. value"],
-    ["<b>Power and network</b>", "Electrical and network infrastructure for the room is in place. Not part of this bid. Where a phase needs an outlet or a network port at a specific spot, check it on your site visit and price any missing piece as its own line, as noted under each phase.", "Not provided"],
+    ["<b>Power and network</b>", "Electrical and network infrastructure for the room is in place, including a 10 Gb fiber-optic network. Not part of this bid. Where a phase needs an outlet or a network port at a specific spot, check it on your site visit and price any missing piece as its own line, as noted under each phase.", "Not provided"],
     ["<b>Floor power and network</b>", "A desk power and network layout three drops across and two deep, matching the existing floor boxes. The district is checking whether to shift the drops 12 in. west; not decided. Treat positions as approximate, confirm them on your site visit, and do not locate anything that depends on them until the district confirms.", "Not provided"],
     ["<b>Video cabling</b>", "Two HDMI 2.1 fiber-optic cables already run through the ceiling from the north wall to the south wall. Not part of this bid. The district will mark both ends. Use them where they help, and tell us the length, connector type and 4K 120 Hz rating you assume before you price.", "Not provided"],
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
@@ -150,7 +150,7 @@ E.append(P("Base bid", H2))
 E.append(table([
     ["Item", "Requirement"],
     ["<b>Cameras</b>", "Five 4K cameras, matching if possible, good in low light because Phase 2 dims the room. Base bid is remote pan-tilt-zoom cameras; price fixed cameras as Alternate 5E. Tell us frame rate, lens field of view, and sensor and low-light performance for your model."],
-    ["<b>Video path</b>", "Your choice of network video (such as NDI, SRT or RTSP over PoE) or direct video cable to a switcher. State the bandwidth each camera needs. Camera traffic must not burden the district network: district IT will give a dedicated VLAN, and a dedicated PoE switch is part of your price. Network and power drops for the cameras are priced in line 5A."],
+    ["<b>Video path</b>", "Your choice of network video (such as NDI, SRT or RTSP over PoE) or direct video cable to a switcher. State the bandwidth each camera needs and what the cameras and switch connect to on the district's 10 Gb fiber network. Camera traffic must not burden the district network: district IT will give a dedicated VLAN, and a dedicated PoE switch is part of your price. Network and power drops for the cameras are priced in line 5A."],
     ["<b>Control and mixing</b>", "A way for one operator to switch between cameras, recall camera positions and send a mix to the stream and to any TV. Software on the esports streaming PC, a hardware switcher, or both; recommend and price it. State the minimum specification the streaming PC needs, so the district can check it."],
     ["<b>Show on the screens</b>", "Any camera, or the program mix, can be put on the main screen as an HDMI source, at the same quality as other sources."],
     ["<b>Mounting</b>", "Rigid, level mounts that keep the lens clear of the TVs, accent lights, ceiling fixtures and the bleachers. Concealed cable. Confirm wall and ceiling backing at every camera."],
