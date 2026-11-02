@@ -29,7 +29,7 @@ E.append(table([
     ["<b>Floor power and network</b>", "A desk power and network layout three drops across and two deep, matching the existing floor boxes. The district is checking whether to shift the drops 12 in. west; not decided. Treat positions as approximate, confirm them on your site visit, and do not locate anything that depends on them until the district confirms.", "Not provided"],
     ["<b>Video cabling</b>", "Two HDMI 2.1 fiber-optic cables already run through the ceiling from the north wall to the south wall. Not part of this bid. The district will mark both ends. Use them where they help, and tell us the length, connector type and 4K 120 Hz rating you assume before you price.", "Not provided"],
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
-    ["<b>Computers</b>", "24 student PCs, plus one or two teacher PCs: one for classroom use and one for esports streaming.", "12 PCs at about $1,300 each, about $15,600 (district figure). Other PCs: not provided."],
+    ["<b>Computers</b>", "24 student PCs, plus one or two teacher PCs: one for classroom use and one for esports streaming.", "12 PCs at about $2,700 each, about $32,400 (district figure). Other PCs: not provided."],
 ], [PW * .17, PW * .57, PW * .26]))
 E.append(P("Values are the district's own figures, shown so bidders can see the investment already in the room. Only the PC figure has been entered so far; the others will be completed before release or left out.", S))
 E.append(P("The six phases", H2))
