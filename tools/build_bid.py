@@ -70,14 +70,13 @@ E.append(table([
     ["Item", "Requirement"],
     ["<b>Displays</b>", "Three matching 85 in. 4K (3840 x 2160) displays. Each must accept 4K at 120 Hz over HDMI 2.1 on at least two inputs, with variable refresh rate and auto low-latency mode, and eARC on one input. Say the model, panel type, and brightness and glare performance in a room with a 10 ft ceiling and light-colored walls. Warranty must cover daily use in a school; say if a commercial or pro-display model is needed to get that."],
     ["<b>Mounts</b>", "Three wall mounts rated for the display weight, centers 86 in. apart and centered on the room, aligned level with the same bottom height. The back of each display needs enough clearance for a Hue gradient strip (Phase 2), so tell us the standoff depth you will use. Wall backing behind the north wall has not been verified; confirm it and price any reinforcement. Include anti-theft hardware and concealed cable management."],
-    ["<b>HDMI 2.1</b>", "Terminate and test the two existing ceiling fiber cables at the north wall and connect the center display. Report any cable that does not carry 4K 120 Hz. Left and right TV video feeds are Alternate 1E, below."],
+    ["<b>HDMI 2.1</b>", "Each display gets its own HDMI 2.1 path at 4K 120 Hz, so the district can run three different sources, or send the esports PC to the center display at 120 Hz. Terminate and test the two existing ceiling fiber cables at the north wall and say which displays they serve. Line 1E is the path to the third display. The center path includes the Phase 2 sync box. Report any cable that does not carry 4K 120 Hz. A video wall mode (one picture across all three) is not required."],
     ["<b>Power and network</b>", "The district reports power and network are in place. Verify a duplex outlet behind each display and one network port near the north wall center. Price any correction as line 1D."],
     ["<b>Setup</b>", "Update firmware, set game mode and local dimming, turn off motion smoothing and unneeded smart features and advertising, and lock settings so a student cannot change them from the remote. Accounts belong to the district."],
     ["<b>Testing</b>", "Show 4K at 120 Hz on each display from the esports PC through every cable in the chain, and give us a short report."],
 ], [PW * .18, PW * .82]))
 E.append(P("Alternates to price", H2))
 E.extend(bl([
-    "<b>1E.</b> HDMI 2.1 video to the left and right displays: show how you would feed them either a mirror of the center screen or their own source, and price each. Today the district only plans for their backlights to follow the center screen.",
     "<b>1F.</b> Commercial or pro-display models, if the base bid is a consumer model.",
 ]))
 
@@ -205,9 +204,9 @@ line("1A", "Three 85 in. 4K 120 Hz displays")
 line("1B", "Mounts, installation, wall reinforcement if needed")
 line("1C", "HDMI 2.1 termination and testing, setup, configuration")
 line("1D", "Correction of missing outlets or network ports (describe)")
-line("1E (alt)", "HDMI 2.1 video to left and right displays (mirror price; independent-source price)")
+line("1E", "Third HDMI 2.1 path to the third display: cable, switcher or both (describe)")
 line("1F (alt)", "Commercial or pro-display models")
-line("", "<b>Phase 1 total (1A to 1D)</b>")
+line("", "<b>Phase 1 total (1A to 1E)</b>")
 sec("PHASE 2: LIGHTING AND SCREEN SYNC")
 line("2A", "Screen sync package: 3 gradient strips, sync box, Hue Bridge Pro")
 line("2B", "Six reactive accent lights")
