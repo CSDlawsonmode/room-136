@@ -136,7 +136,7 @@ dd { margin: 0; font-family: var(--font-mono); font-size: 13px; text-align: righ
         <h2>This layout</h2>
         <dl id="stats"></dl>
       </div>
-      <p class="note">Wall, door and floor box positions come from the plan sheet and your measurements; the alcove is 194 in. long and the server room wall 130 in., as you gave them, with the door wall about 40 in. back from the south wall. Cabinets are as you gave them, all bifold: a tall 36 x 30 in. floor cabinet against the entry pier at the west end, then three wall cabinets (46, 36, 36 in. wide, 13 in. deep, 27 in. tall, tops 35 in. below the ceiling) west to east from about x 32. Assumptions: bleachers are two 6 ft bays, one on each side of the fixed L-shaped teacher desk, 4 tiers, 3 seats per bay per tier, and they overlap the wall cabinets, so the cabinet demo switches on automatically when they are out; every door opens out; the server room is 76 x 130 in. behind the alcove, with its door and window placed from your markup.</p>
+      <p class="note">Wall, door and floor box positions come from the plan sheet and your measurements; the alcove is 194 in. long and the server room wall 130 in., as you gave them, with the door wall about 40 in. back from the south wall. Cabinets are as you gave them, all bifold: a tall 36 x 30 in. floor cabinet against the entry pier at the west end, then three wall cabinets (46, 36, 36 in. wide, 13 in. deep, 27 in. tall, tops 35 in. below the ceiling) west to east from about x 32. Assumptions: bleachers are two 6 ft bays, with the fixed L-shaped teacher desk (two 70 x 30 in. tables) butted against the west one, 4 tiers, 3 seats per bay per tier, and they overlap the wall cabinets, so the cabinet demo switches on automatically when they are out; every door opens out; the server room is 76 x 130 in. behind the alcove, with its door and window placed from your markup.</p>
     </aside>
   </div>
 </div>
@@ -484,14 +484,14 @@ var ALLSEATS = [];
     return g;
   }
   for (var i = 0; i < 12; i++) makeDesk(i, false, [-17.5, 17.5], true, false);
-  makeDesk(12, true, [0], true, true);
-  /* the teacher desk is permanent and L-shaped: a 30 x 34 in. return on the east end, with a second monitor on it */
+  makeDesk(12, true, [-15], true, true);
+  /* the teacher desk is permanent and L-shaped: a second 70 x 30 in. table runs from the west end of the main run to the south wall (shown as its 40 in. extra length), butted against the west bleacher wing */
   (function () {
     var g = desks[12].group;
-    g.add(mesh(new THREE.BoxGeometry(30, 1.5, 34), MT.teacherTop, -20, 29.25, -32));
-    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 34), MT.frame, -5, 14, -32));
-    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 34), MT.frame, -35, 14, -32));
-    var mon = makeMonitor(); mon.position.set(-20, 0, -32); mon.rotation.y = -Math.PI / 2; g.add(mon);
+    g.add(mesh(new THREE.BoxGeometry(30, 1.5, 40), MT.teacherTop, 20, 29.25, -35));
+    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 40), MT.frame, 5, 14, -35));
+    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 40), MT.frame, 35, 14, -35));
+    var mon = makeMonitor(); mon.position.set(20, 0, -35); mon.rotation.y = Math.PI / 2; g.add(mon);
     desks[12].screens.push(mon.userData.screen);
     g.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   })();
@@ -507,7 +507,7 @@ var ALLSEATS = [];
     var cLeg = new THREE.BoxGeometry(2, 15, 14);
     for (var t = 0; t < 4; t++) {
       for (var b = 0; b < 2; b++) {
-        var cx = [128, 318][b];   /* x 92 to 164 and 282 to 354, with the desk between at x 188 to 258 */
+        var cx = [128, 318][b];   /* x 92 to 164 and 282 to 354; the L-shaped desk butts against the west wing (x 164 to 234), leaving a 48 in. walkway to the east wing */
         var tg = new THREE.Group();
         tg.position.x = cx;
         var deck = new THREE.Mesh(deckGeo, deckMat);
@@ -546,7 +546,7 @@ var ALLSEATS = [];
 
   /* ---------- poses ---------- */
 /* ids 0-2 west column, 3-5 center stack (west half), 6-8 center stack (east half), 9-11 east column, 12 teacher (fixed) */
-var TEACHER_F = { x: 223, z: 322, rot: Math.PI };   /* permanent L-shaped teacher and streaming desk at the south wall, between the two bleacher wings */
+var TEACHER_F = { x: 199, z: 321, rot: Math.PI };   /* permanent L-shaped teacher and streaming desk at the south wall, butted against the west bleacher wing (x 164 to 234) */
 var SERVER = { rows: [16, 46, 76, 106], px: -40 };    /* assumed 76 x 130 in. room behind the alcove */
 function classPoses(side) {
   var a = [], sx = [60, 185, 215, 340], rot = [-90, 90, -90, 90];
@@ -604,8 +604,8 @@ var MODES = {
   },
   bleach: {
     bleach: 1, poses: classPoses(true), tv: TVS_CLASS,
-    desc: 'The same class layout with the two bleacher wings slid out facing the TVs, one on each side of the fixed teacher desk. The two 36 in. wall cabinets and the countertop section come out to make room. The student stack stops 34 in. short of the front tier.',
-    stats: [['Student seats', '24'], ['Bleacher seats', '24'], ['Teacher desk', 'fixed, between the wings'], ['Gap to front tier', '34 in.']]
+    desc: 'The same class layout with the two bleacher wings slid out facing the TVs, with the fixed teacher desk butted against the west wing and a 48 in. walkway beside it. The two 36 in. wall cabinets and the countertop section come out to make room. The student stack stops 34 in. short of the front tier.',
+    stats: [['Student seats', '24'], ['Bleacher seats', '24'], ['Teacher desk', 'fixed, against the west wing'], ['Gap to front tier', '34 in.']]
   },
   pres: {
     bleach: 0, poses: presPoses(), seatPoses: presSeats(), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
@@ -614,7 +614,7 @@ var MODES = {
   },
   presb: {
     bleach: 1, poses: presPoses(), seatPoses: presSeats(120), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
-    desc: 'The presentation layout with the two bleacher wings slid out behind it, one on each side of the fixed teacher desk. The student desks are gone, the 24 chairs sit in three east-west rows of eight up front, and the wings add a second audience tier behind them. The chair rows move 30 in. toward the TVs to leave a walking aisle.',
+    desc: 'The presentation layout with the two bleacher wings slid out behind it, with the fixed teacher desk butted against the west wing and a 48 in. walkway beside it. The student desks are gone, the 24 chairs sit in three east-west rows of eight up front, and the wings add a second audience tier behind them. The chair rows move 30 in. toward the TVs to leave a walking aisle.',
     stats: [['Chairs', '24 in 3 rows of 8'], ['Bleacher seats', '24'], ['Total seats', '48'], ['Front row to TV wall', '120 in.'], ['Last row to front tier', '80 in.'], ['Seat spacing', '36 in.']]
   },
   comp: {
@@ -629,7 +629,7 @@ var VIEWS = {
   side: { pos: [760, 150, 200], target: [160, 40, 200] },
   bleachers: { pos: [200, 98, 352], target: [200, 46, 40], bleach: true },
   facing: { pos: [200, 88, 16], target: [200, 40, 300], bleach: true },
-  teacher: { pos: [223, 52, 352], target: [200, 40, 30] },
+  teacher: { pos: [214, 52, 348], target: [200, 40, 30] },
   server: { pos: [-38, 235, 300], target: [-38, 10, 70] },
   student: function () {
     if (MODES[mode].seatPoses) { var sp = MODES[mode].seatPoses[10]; return { pos: [sp.x, 50, sp.z], target: [sp.x, 34, 0] }; }

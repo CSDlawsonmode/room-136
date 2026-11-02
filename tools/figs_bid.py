@@ -50,10 +50,10 @@ def fig_audio():
     ax.text(200, 152, "primary listening area (desk zone)", ha="center", va="center", fontsize=6.2, color="#46702a", zorder=3)
     for wx in (92, 282):
         ax.add_patch(Rectangle((wx, 280), 72, 96, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.1, zorder=2))
-    ax.add_patch(Rectangle((188, 307), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((188, 337), 30, 34, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
+    ax.add_patch(Rectangle((164, 306), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((164, 336), 30, 40, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
     ax.text(128, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
     ax.text(318, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
-    ax.text(223, 297, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
+    ax.text(199, 296, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
     def sp(x, z, mk, c, lab, dx=0, dz=0, ha="center", s=70, fc=None):
         ax.scatter([x], [z], marker=mk, s=s, c=fc or c, edgecolors=c, linewidths=1, zorder=10)
         ax.text(x + dx, z + dz, lab, ha=ha, va="center", fontsize=5.6, color=INK, zorder=11, bbox=dict(fc="white", ec="none", pad=.8, alpha=.85))
@@ -116,10 +116,10 @@ def fig_cameras():
         ax.add_patch(Rectangle((cx - 37, 0), 74.1, 3.2, fc="#0c0e10", ec="none", zorder=7))
     for wx in (92, 282):
         ax.add_patch(Rectangle((wx, 280), 72, 96, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.1, zorder=2))
-    ax.add_patch(Rectangle((188, 307), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((188, 337), 30, 34, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
+    ax.add_patch(Rectangle((164, 306), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((164, 336), 30, 40, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
     ax.text(128, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
     ax.text(318, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
-    ax.text(223, 297, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
+    ax.text(199, 296, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
     ax.add_patch(Ellipse((200, 150), 330, 170, fc="#6a8f3a", ec="#6a8f3a", alpha=.08, ls=(0, (5, 3)), zorder=2))
     ax.text(200, 150, "competitor / desk zone", ha="center", va="center", fontsize=6.2, color="#46702a", zorder=3)
     import math

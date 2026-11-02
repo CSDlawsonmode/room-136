@@ -42,7 +42,7 @@ E.append(table([
     ["Phase", "What it covers", "Why this order", "Depends on"],
     ["<b>1. Displays</b>", "Three 85 in. 4K 120 Hz displays on the north wall, mounts, HDMI 2.1 connections, setup and testing.", "The screens are the heart of the room, and the lighting needs them mounted first.", "None."],
     ["<b>2. Lighting and screen sync</b>", "Three Hue gradient strips behind the displays, a Hue Play HDMI Sync Box on the main screen, six reactive accent lights, Hue-controlled ceiling lighting in four dimmable zones, a Hue Bridge Pro, wall controls, programming.", "The most visible change for students. Needs the displays mounted and the existing power and network.", "Phase 1 mounts and clearances."],
-    ["<b>3. Seating</b>", "Two retractable bleacher wings on the south wall around a fixed teacher desk, plus removing two wall cabinets (Attachment A).", "Longest lead time. Settles what is on the south wall before sound and cameras are placed.", "None. Coordinate with Phases 4 and 5."],
+    ["<b>3. Seating</b>", "Two retractable bleacher wings on the south wall, with a fixed teacher desk butted against one, plus removing two wall cabinets (Attachment A).", "Longest lead time. Settles what is on the south wall before sound and cameras are placed.", "None. Coordinate with Phases 4 and 5."],
     ["<b>4. Dolby Atmos audio</b>", "7.1.4 speaker system (11 speakers plus subwoofer), receiver or processor, amplification, rough-in, calibration, training.", "Rear speakers and overheads sit around the bleachers; the receiver joins the chain from Phase 2.", "Phases 1 to 3."],
     ["<b>5. Cameras and broadcast</b>", "Five 4K cameras (three on the north wall, two on the south wall), network and power for them, control, capture and switching for the esports streaming PC.", "Needs seating and lighting settled so the cameras see the room as it will really look.", "Phases 2 and 3."],
     ["<b>6. Wall graphics and finishes</b>", "Printed wall graphics and branding, and the remaining finish items that make it look like an arena. Scope still being set; unit prices requested.", "Last, so nothing is covered by or fights with the earlier work.", "Phases 1 to 5."],
@@ -111,11 +111,11 @@ E.append(Spacer(1, 12))
 E.append(P("Phase 3: Retractable seating", H1))
 E.append(P("Pricing for the south-wall bleachers, based on our earlier inquiry (Attachment A, which still calls the room 413).", B))
 E.extend(bl([
-    "<b>Layout:</b> two bleacher wings of one 72 in. bay each, on either side of a fixed teacher and streaming desk against the south wall (Figures 3 and 4). The wings sit at x = 92 to 164 in. and 282 to 354 in., with the desk between at about x = 188 to 258 in.; vendors may propose better positions. Keep at least 36 in. clear in front of the east door, which opens out.",
+    "<b>Layout:</b> two bleacher wings of one 72 in. bay each, at x = 92 to 164 in. and 282 to 354 in. The fixed teacher and streaming desk is two 70 x 30 in. tables in an L, butted against the west wing at x = 164 to 234 in., which leaves a 48 in. walkway to the desk on its east side (Figures 3 and 4). Vendors may propose better positions. Keep at least 36 in. clear in front of the east door, which opens out.",
     "<b>Option 3A:</b> two 72 in. bays, three rows at 30 in. spacing (about 90 in. deep).",
     "<b>Option 3B:</b> the same two bays, four rows (about 120 in. deep).",
     "<b>Cabinet work, 3C:</b> remove the two 36 in. wall cabinets at x = 78 to 150 in. and the countertop section from x = 92 in., and patch the wall. The 46 in. cabinet and the tall cabinet stay.",
-    "<b>Teacher desk, 3D:</b> the desk is district-supplied, fixed and L-shaped (about 70 in. wide with a 30 in. return). Price power, network and HDMI at that spot on the south wall if the existing infrastructure does not reach it.",
+    "<b>Teacher desk, 3D:</b> the desk is district-supplied, fixed and L-shaped (two 70 x 30 in. tables). Price power, network and HDMI at that spot on the south wall if the existing infrastructure does not reach it.",
     "Tell us stowed depth, wall backing needed, guardrail and access requirements and the standard you meet, and operating effort.",
     "Coordinate with Phases 4 and 5: rear speaker and overhead positions, and the two south-wall cameras, sit above or near the seating zone.",
 ]))
@@ -219,7 +219,7 @@ line("2D", "Programming, scenes, testing, training")
 line("2E (alt)", "Second and third sync box, if needed for left and right TVs")
 line("", "<b>Phase 2 total (2A to 2D)</b>")
 sec("PHASE 3: SEATING")
-line("3A", "Three rows, two 72 in. bays (one each side of the teacher desk)")
+line("3A", "Three rows, two 72 in. bays (desk butted against the west bay)")
 line("3B (alt)", "Four rows, two 72 in. bays")
 line("3C", "Remove two wall cabinets and countertop section, patch wall")
 line("3D", "Power, network and HDMI at the south-wall teacher desk position")
