@@ -31,6 +31,7 @@ E.append(table([
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
     ["<b>Computers</b>", "25 PCs in all: 24 student PCs and one teacher PC. A second teacher PC for esports streaming may be added; the district will confirm.", "24 student PCs at about $2,700 each, about $64,800 (district figure). Teacher PC: not provided."],
     ["<b>Keyboards and mice</b>", "New keyboards and mice for the room. Quantity not yet entered.", "Keyboards about $120 each, mice about $60 each ($180 per keyboard and mouse set)."],
+    ["<b>Large-format printer</b>", "The district prints in house on a large-format printer, run through the media tech program. Not part of this bid.", "Not provided"],
     ["<b>Local server</b>", "A district-run local server, kept in the shared room to the northwest, will run the games, student logins, accounts and maintenance for the lab, in place of a paid subscription service such as SENET or ggRock. Not part of this bid. Do not include game-library or lab-management software or subscriptions in your price.", "Not provided"],
 ], [PW * .17, PW * .57, PW * .26]))
 E.append(P("Values are the district's own figures, shown so bidders can see the investment already in the room. Only the student PC figure has been entered so far; the others will be completed before release or left out.", S))
@@ -170,6 +171,7 @@ E.append(P("Phase 6: Wall graphics and finishes", H1))
 E.append(P("The district is still setting the scope for the finishes that make the room look like an arena. Until it does, we ask for unit prices so the work can be priced when the design is chosen.", B))
 E.extend(bl([
     "<b>6A. Printed wall graphics.</b> Price per square foot, installed, for vinyl or printed fabric panels on the east, west and south walls (not the display wall), including a design allowance, proofs and removal. The district will supply logos and artwork.",
+    "<b>6D (alt). Install only.</b> The district can print graphics in house on its large-format printer. Price installation alone, per square foot, for graphics the district prints, and give the material, size limits and finish you need us to print to (substrate, panel width, laminate).",
     "<b>6B. Signage.</b> Price for a room sign and one illuminated wall sign, supplied with the district's text or logo.",
     "<b>6C. Other finishes.</b> The district may add items such as paint, acoustic wall panels, trophy or display shelving, or a stage rail. List anything you would recommend and price it as a separate line.",
     "Every material must be rated for classroom use and meet the fire-code flame-spread requirements the jurisdiction applies. Give us the rating for each material, and its cleaning instructions.",
@@ -235,6 +237,7 @@ line("5F (alt)", "Hardware video switcher or capture device")
 line("", "<b>Phase 5 total (5A to 5C)</b>")
 sec("PHASE 6: WALL GRAPHICS AND FINISHES (unit prices)")
 line("6A", "Printed wall graphics, installed (price per sq ft); design allowance")
+line("6D (alt)", "Install only, graphics printed by the district (price per sq ft)")
 line("6B", "Room sign and one illuminated wall sign")
 line("6C", "Other finishes recommended (describe each line)")
 sec("COMBINED")
