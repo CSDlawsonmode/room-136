@@ -9,7 +9,7 @@ Interactive 3D layout of the Caldwell High School media tech and esports compute
 | `index.html` | The 3D model. Single self-contained page; three.js and fonts load from CDNs, so it needs internet. Open it in a browser, or serve the folder (`python -m http.server`). |
 | `docs/Room413_Bleacher_Inquiry.pdf` | Dimensioned plan, south-wall cabinet details and questions for a bleacher vendor. |
 | `docs/Room413_Raceway_Plans.pdf` | FSR Smart-Way floor raceway concept over three layouts. |
-| `docs/Room136_Phased_Bid_Package.pdf` | Draft four-phase bid package: infrastructure, Philips Hue lighting with screen sync, Dolby Atmos audio, retractable seating. Includes plans, a signal-flow diagram and a fill-in price sheet. Draft for district purchasing review. |
+| `docs/Room136_Phased_Bid_Package.pdf` | Draft six-phase bid package: 85 in. displays, Philips Hue lighting with screen sync, retractable seating, Dolby Atmos audio, five 4K broadcast cameras, wall graphics. Includes plans, a signal-flow diagram, a fill-in price sheet and the equipment the district already has. Draft for district purchasing review. |
 | `tools/figs.py`, `tools/build.py` | Scripts that draw the plans and assemble the bleacher and raceway PDFs. |
 | `tools/figs_bid.py`, `tools/build_bid.py` | Scripts that draw the lighting, audio and signal-flow figures and assemble the bid package. |
 | `tools/pdfcommon.py` | Shared fonts and layout helpers for the PDF scripts. |
