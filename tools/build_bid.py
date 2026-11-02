@@ -31,6 +31,7 @@ E.append(table([
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
     ["<b>Computers</b>", "25 PCs in all: 24 student PCs and one teacher PC. A second teacher PC for esports streaming may be added; the district will confirm.", "24 student PCs at about $2,700 each, about $64,800 (district figure). Teacher PC: not provided."],
     ["<b>Keyboards and mice</b>", "New keyboards and mice for the room. Quantity not yet entered.", "Keyboards about $120 each, mice about $60 each ($180 per keyboard and mouse set)."],
+    ["<b>Local server</b>", "A district-run local server will run the games, student logins, accounts and maintenance for the lab, in place of a paid subscription service such as SENET or ggRock. Not part of this bid. Do not include game-library or lab-management software or subscriptions in your price.", "Not provided"],
 ], [PW * .17, PW * .57, PW * .26]))
 E.append(P("Values are the district's own figures, shown so bidders can see the investment already in the room. Only the student PC figure has been entered so far; the others will be completed before release or left out.", S))
 E.append(P("The six phases", H2))
