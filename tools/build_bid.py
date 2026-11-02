@@ -9,7 +9,9 @@ def link(url, text): return "<link href='%s' color='#0b6e99'>%s</link>" % (url, 
 BLANK = "&nbsp;"
 TITLE = "Room 136 phased bid package | Caldwell High School"
 
-doc = SimpleDocTemplate(os.path.join(DOCS, "Room136_Phased_Bid_Package.pdf"), pagesize=letter,
+import sys
+OUTFILE = sys.argv[1] if len(sys.argv) > 1 else os.path.join(DOCS, "Room136_Phased_Bid_Package.pdf")   # optional output path, e.g. when the PDF is open in a viewer
+doc = SimpleDocTemplate(OUTFILE, pagesize=letter,
                         leftMargin=.7 * inch, rightMargin=.7 * inch, topMargin=.6 * inch, bottomMargin=.7 * inch,
                         title="Room 136 Phased Bid Package", author="Chad Lawson")
 E = []

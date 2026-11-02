@@ -101,7 +101,7 @@ def fig_flow():
     box(ax, 80, 10, 19, 19, "Hue lights\n3 gradient strips\n6 accent lights\nceiling panels (zones)", fc="#fbf3d4")
     arrow(ax, (76.8, 21.5), (79.2, 21.5), c=ACCENT, ls=(0, (3, 2)), label="Zigbee", lp=(0, 3.4))
     box(ax, 1, 1, 98, 6.5, "District network (Ethernet): bridge, sync box, AV receiver and PoE cameras each need a wired port; district IT provides ports, VLAN and DHCP", fc="#f1f3f4", ec=MUTE, fs=5.6)
-    ax.text(1, 21, "Left and right 85\" TVs: backlights follow\nthe center screen. Any video feed to them\nis priced as Alternate 1E. Dashed boxes\nare later phases.", fontsize=5.5, color=MUTE, va="center")
+    ax.text(1, 21, "Left and right 85\" TVs: backlights follow\nthe center screen. Each has its own HDMI path\n(line 1E). Dashed boxes are\nlater phases.", fontsize=5.5, color=MUTE, va="center")
     fig.savefig(OUT + "bid_flow.png", dpi=240, bbox_inches="tight", facecolor="white"); plt.close(fig)
 
 def fig_cameras():
