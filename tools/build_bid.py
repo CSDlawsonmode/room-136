@@ -30,6 +30,7 @@ E.append(table([
     ["<b>Video cabling</b>", "Two HDMI 2.1 fiber-optic cables already run through the ceiling from the north wall to the south wall. Not part of this bid. The district will mark both ends. Use them where they help, and tell us the length, connector type and 4K 120 Hz rating you assume before you price.", "Not provided"],
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
     ["<b>Computers</b>", "25 PCs in all: 24 student PCs and one teacher PC. A second teacher PC for esports streaming may be added; the district will confirm.", "24 student PCs at about $2,700 each, about $64,800 (district figure). Teacher PC: not provided."],
+    ["<b>Keyboards and mice</b>", "New keyboards and mice for the room. Quantity not yet entered.", "Keyboards about $120 each, mice about $60 each ($180 per keyboard and mouse set)."],
 ], [PW * .17, PW * .57, PW * .26]))
 E.append(P("Values are the district's own figures, shown so bidders can see the investment already in the room. Only the student PC figure has been entered so far; the others will be completed before release or left out.", S))
 E.append(P("The six phases", H2))
