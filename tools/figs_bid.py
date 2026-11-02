@@ -48,8 +48,12 @@ def fig_audio():
     room(ax, fb=False, cabs=True, demo=False)
     ax.add_patch(Ellipse((200, 150), 330, 170, fc="#6a8f3a", ec="#6a8f3a", alpha=.09, ls=(0, (5, 3)), zorder=2))
     ax.text(200, 152, "primary listening area (desk zone)", ha="center", va="center", fontsize=6.2, color="#46702a", zorder=3)
-    ax.add_patch(Rectangle((92, 256), 216, 120, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.08, zorder=2))
-    ax.text(200, 360, "bleacher zone (Phase 3)", ha="center", va="center", fontsize=5.8, color=BLE, zorder=3)
+    for wx in (92, 282):
+        ax.add_patch(Rectangle((wx, 280), 72, 96, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.1, zorder=2))
+    ax.add_patch(Rectangle((188, 307), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((188, 337), 30, 34, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
+    ax.text(128, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
+    ax.text(318, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
+    ax.text(223, 297, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
     def sp(x, z, mk, c, lab, dx=0, dz=0, ha="center", s=70, fc=None):
         ax.scatter([x], [z], marker=mk, s=s, c=fc or c, edgecolors=c, linewidths=1, zorder=10)
         ax.text(x + dx, z + dz, lab, ha=ha, va="center", fontsize=5.6, color=INK, zorder=11, bbox=dict(fc="white", ec="none", pad=.8, alpha=.85))
@@ -71,7 +75,7 @@ def fig_audio():
     ax.scatter([lx + 80], [lz], marker="s", s=70, c="#111"); ax.text(lx + 90, lz, "subwoofer", fontsize=5.8, va="center")
     ax.scatter([lx + 140], [lz], marker="^", s=60, c="#b3541e"); ax.text(lx + 150, lz, "side / rear surround (wall)", fontsize=5.8, va="center")
     ax.scatter([lx + 262], [lz], marker="o", s=60, c="white", edgecolors="#c0392b", linewidths=1); ax.text(lx + 272, lz, "overhead (ceiling)", fontsize=5.8, va="center")
-    ax.text(lx, lz + 18, "Indicative 7.1.4 layout. The west side has no wall beside the desk zone (open alcove), so SL is shown on the alcove wall;\nbidder to propose a balanced solution. Verify against wall and ceiling construction, the cabinets and the Phase 3 bleachers; heights shown at 45 degrees from the middle of the desk zone.", fontsize=5.2, color=MUTE, va="center")
+    ax.text(lx, lz + 18, "Indicative 7.1.4 layout. The west side has no wall beside the desk zone (open alcove), so SL is shown on the alcove wall;\nbidder to propose a balanced solution. Verify against wall and ceiling construction, the cabinets and the Phase 3 bleacher wings; heights shown at 45 degrees from the middle of the desk zone.", fontsize=5.2, color=MUTE, va="center")
     title(ax, "Phase 4: Dolby Atmos 7.1.4 concept", "Room 136, plan view, inches. L/C/R on the north wall with the three 85 in. TVs; overheads in the 10 ft ceiling.")
     fig.savefig(OUT + "bid_audio.png", dpi=240, bbox_inches="tight", facecolor="white"); plt.close(fig)
 
@@ -110,8 +114,12 @@ def fig_cameras():
     for i in range(3):
         cx = 200 + (i - 1) * 86.1
         ax.add_patch(Rectangle((cx - 37, 0), 74.1, 3.2, fc="#0c0e10", ec="none", zorder=7))
-    ax.add_patch(Rectangle((92, 256), 216, 120, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.08, zorder=2))
-    ax.text(200, 366, "bleacher zone (Phase 3)", ha="center", va="center", fontsize=5.8, color=BLE, zorder=3)
+    for wx in (92, 282):
+        ax.add_patch(Rectangle((wx, 280), 72, 96, fc=BLE, ec=BLE, lw=.8, ls=(0, (5, 3)), alpha=.1, zorder=2))
+    ax.add_patch(Rectangle((188, 307), 70, 30, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5)); ax.add_patch(Rectangle((188, 337), 30, 34, fc="#d9b36c", ec="#8a6a30", lw=.8, zorder=5))
+    ax.text(128, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
+    ax.text(318, 328, "bleacher wing", ha="center", va="center", fontsize=5.6, color=BLE, zorder=3)
+    ax.text(223, 297, "fixed L-shaped teacher desk", ha="center", va="center", fontsize=5.4, color="#6a4f1c", zorder=6)
     ax.add_patch(Ellipse((200, 150), 330, 170, fc="#6a8f3a", ec="#6a8f3a", alpha=.08, ls=(0, (5, 3)), zorder=2))
     ax.text(200, 150, "competitor / desk zone", ha="center", va="center", fontsize=6.2, color="#46702a", zorder=3)
     import math

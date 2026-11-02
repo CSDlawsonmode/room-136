@@ -136,7 +136,7 @@ dd { margin: 0; font-family: var(--font-mono); font-size: 13px; text-align: righ
         <h2>This layout</h2>
         <dl id="stats"></dl>
       </div>
-      <p class="note">Wall, door and floor box positions come from the plan sheet and your measurements; the alcove is 194 in. long and the server room wall 130 in., as you gave them, with the door wall about 40 in. back from the south wall. Cabinets are as you gave them, all bifold: a tall 36 x 30 in. floor cabinet against the entry pier at the west end, then three wall cabinets (46, 36, 36 in. wide, 13 in. deep, 27 in. tall, tops 35 in. below the ceiling) west to east from about x 32. Assumptions: bleachers are 3 bays at 6 ft, 4 tiers, 3 seats per bay per tier, and they currently overlap the wall cabinets; the server room is 76 x 130 in. behind the alcove, with its door and window placed from your markup.</p>
+      <p class="note">Wall, door and floor box positions come from the plan sheet and your measurements; the alcove is 194 in. long and the server room wall 130 in., as you gave them, with the door wall about 40 in. back from the south wall. Cabinets are as you gave them, all bifold: a tall 36 x 30 in. floor cabinet against the entry pier at the west end, then three wall cabinets (46, 36, 36 in. wide, 13 in. deep, 27 in. tall, tops 35 in. below the ceiling) west to east from about x 32. Assumptions: bleachers are two 6 ft bays, one on each side of the fixed L-shaped teacher desk, 4 tiers, 3 seats per bay per tier, and they overlap the wall cabinets, so the cabinet demo switches on automatically when they are out; every door opens out; the server room is 76 x 130 in. behind the alcove, with its door and window placed from your markup.</p>
     </aside>
   </div>
 </div>
@@ -341,7 +341,7 @@ dd { margin: 0; font-family: var(--font-mono); font-size: 13px; text-align: righ
     });
   });
   var doorGroup = new THREE.Group(); scene.add(doorGroup);
-  [[360, 0, 396, 36], [364, 312, 400, 348]].forEach(function (r) {
+  [[360, -36, 396, 0], [400, 312, 436, 348]]   /* every door opens out, so the swing zones are outside the room */.forEach(function (r) {
     var pts = [new THREE.Vector3(r[0], 0.4, r[1]), new THREE.Vector3(r[2], 0.4, r[1]), new THREE.Vector3(r[2], 0.4, r[3]), new THREE.Vector3(r[0], 0.4, r[3])];
     var l = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xE0453A }));
     doorGroup.add(l);
@@ -485,8 +485,18 @@ var ALLSEATS = [];
   }
   for (var i = 0; i < 12; i++) makeDesk(i, false, [-17.5, 17.5], true, false);
   makeDesk(12, true, [0], true, true);
+  /* the teacher desk is permanent and L-shaped: a 30 x 34 in. return on the east end, with a second monitor on it */
+  (function () {
+    var g = desks[12].group;
+    g.add(mesh(new THREE.BoxGeometry(30, 1.5, 34), MT.teacherTop, -20, 29.25, -32));
+    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 34), MT.frame, -5, 14, -32));
+    g.add(mesh(new THREE.BoxGeometry(1.5, 28, 34), MT.frame, -35, 14, -32));
+    var mon = makeMonitor(); mon.position.set(-20, 0, -32); mon.rotation.y = -Math.PI / 2; g.add(mon);
+    desks[12].screens.push(mon.userData.screen);
+    g.traverse(function (o) { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  })();
 
-  /* ---------- bleachers: three 6 ft bays, four tiers, slide out ---------- */
+  /* ---------- bleachers: two 6 ft bays (one on each side of the teacher desk), four tiers, slide out ---------- */
   var bleach = { p: 0, target: 0, tiers: [] };
   (function () {
     var deckMat = std(0xB4B9BD);
@@ -496,8 +506,8 @@ var ALLSEATS = [];
     var cBack = new THREE.BoxGeometry(18, 15, 2);
     var cLeg = new THREE.BoxGeometry(2, 15, 14);
     for (var t = 0; t < 4; t++) {
-      for (var b = 0; b < 3; b++) {
-        var cx = 200 + (b - 1) * 72;
+      for (var b = 0; b < 2; b++) {
+        var cx = [128, 318][b];   /* x 92 to 164 and 282 to 354, with the desk between at x 188 to 258 */
         var tg = new THREE.Group();
         tg.position.x = cx;
         var deck = new THREE.Mesh(deckGeo, deckMat);
@@ -535,15 +545,13 @@ var ALLSEATS = [];
   setBleachers(0);
 
   /* ---------- poses ---------- */
-/* ids 0-2 west column, 3-5 center stack (west half), 6-8 center stack (east half), 9-11 east column, 12 teacher */
-var TEACHER_T = { x: 200, z: 261, rot: Math.PI };      /* class: T'd onto the south end of the center stack */
-var TEACHER_A = { x: -12, z: 165, rot: rad(90) };     /* alcove, north end, beside the server room door */
-var TEACHER_VIA = [{ x: 40, z: 262, rot: Math.PI }];  /* path between the two, south of the west column */
+/* ids 0-2 west column, 3-5 center stack (west half), 6-8 center stack (east half), 9-11 east column, 12 teacher (fixed) */
+var TEACHER_F = { x: 223, z: 322, rot: Math.PI };   /* permanent L-shaped teacher and streaming desk at the south wall, between the two bleacher wings */
 var SERVER = { rows: [16, 46, 76, 106], px: -40 };    /* assumed 76 x 130 in. room behind the alcove */
 function classPoses(side) {
   var a = [], sx = [60, 185, 215, 340], rot = [-90, 90, -90, 90];
   for (var s = 0; s < 4; s++) for (var j = 0; j < 3; j++) a.push({ x: sx[s], z: 71 + 70 * j, rot: rad(rot[s]) });
-  a.push(side ? { x: TEACHER_A.x, z: TEACHER_A.z, rot: TEACHER_A.rot, via: TEACHER_VIA, dur: 2600 } : { x: TEACHER_T.x, z: TEACHER_T.z, rot: TEACHER_T.rot });   /* side: out of the way of the bleachers */
+  a.push({ x: TEACHER_F.x, z: TEACHER_F.z, rot: TEACHER_F.rot });
   return a;
 }
 function compPoses() {
@@ -553,7 +561,7 @@ function compPoses() {
   [{ ids: [3, 4, 5], cx: 106, cz: 140, phi: rad(56) }, { ids: [6, 7, 8], cx: 294, cz: 140, phi: -rad(56) }].forEach(function (p) {
     p.ids.forEach(function (id, k) { a[id] = { x: p.cx + rows[k] * Math.cos(p.phi), z: p.cz - rows[k] * Math.sin(p.phi), rot: p.phi }; });
   });
-  a[12] = { x: TEACHER_A.x, z: TEACHER_A.z, rot: TEACHER_A.rot, via: TEACHER_VIA, dur: 2600 };
+  a[12] = { x: TEACHER_F.x, z: TEACHER_F.z, rot: TEACHER_F.rot };
   /* the six extra desks roll through the alcove and the server room door; the last two park on top of the first two */
   var lead = [{ x: 10, z: 255, rot: 0 }, { x: -50, z: 255, rot: rad(90) }, { x: -50, z: 160, rot: rad(90) }];
   [9, 10, 11, 0, 1, 2].forEach(function (id, k) {
@@ -570,10 +578,11 @@ function loc(p, lx, lz) {
 }
 
 function presPoses() {
-  var order = [12, 2, 5, 8, 11, 1, 4, 7, 10, 0, 3, 6, 9], a = [], i;
+  var order = [2, 5, 8, 11, 1, 4, 7, 10, 0, 3, 6, 9], a = [], i;
   var via = [{ x: 10, z: 255, rot: 0 }, { x: -50, z: 255, rot: rad(90) }, { x: -50, z: 160, rot: rad(90) }, { x: -50, z: 128, rot: rad(90) }, { x: -50, z: 70, rot: rad(90) }];
   for (i = 0; i < 13; i++) a.push(null);
-  order.forEach(function (id, k) { a[id] = { x: -50, z: 30, rot: rad(90), gone: true, nodoor: true, hide: true, k: k, kmax: 12, via: via, delay: k * 520, dur: 3400 }; });
+  a[12] = { x: TEACHER_F.x, z: TEACHER_F.z, rot: TEACHER_F.rot };
+  order.forEach(function (id, k) { a[id] = { x: -50, z: 30, rot: rad(90), gone: true, nodoor: true, hide: true, k: k, kmax: 11, via: via, delay: k * 520, dur: 3400 }; });
   return a;
 }
 function presSeats(z0) {
@@ -583,35 +592,35 @@ function presSeats(z0) {
   for (r = 0; r < 3; r++) {
     L.slice(r * 8, r * 8 + 8).sort(function (a, b) { return a.x - b.x; }).forEach(function (s, c) { out[s.k] = { x: 200 + (c - 3.5) * 36, z: (z0 || 150) + r * 40, rot: Math.PI }; });
   }
-  out[24] = null;   /* the teacher chair leaves with the teacher desk */
+  /* seat 24 is the teacher chair; it stays with the fixed desk */
   return out;
 }
 var TVS_CLASS = [['Lesson slides', 'teacher display', 210], ['Shared screen', 'student demo', 190], ['Announcements', 'bell schedule', 230]];
 var MODES = {
   'class': {
     bleach: 0, poses: classPoses(), tv: TVS_CLASS,
-    desc: 'Standard setup: a back-to-back stack of 2x3 down the center, a 1x3 column on each side, and your desk T-d onto the south end of the stack. Students sit on the aisle sides with their backs to the room, so you can see everyone from the T. Bleachers stay folded.',
-    stats: [['Student seats', '24'], ['Desks', '12 + 1 teacher'], ['Between chair backs', '48 in.'], ['Side walls', '45 in.'], ['North wall', '36 in.']]
+    desc: 'Standard setup: a back-to-back stack of 2x3 down the center, a 1x3 column on each side, and the L-shaped teacher and streaming desk fixed against the south wall. Students sit on the aisle sides with their backs to the room, so the teacher can see every screen from the desk. Bleachers stay folded.',
+    stats: [['Student seats', '24'], ['Desks', '12 + fixed teacher desk'], ['Between chair backs', '48 in.'], ['Side walls', '45 in.'], ['North wall', '36 in.']]
   },
   bleach: {
     bleach: 1, poses: classPoses(true), tv: TVS_CLASS,
-    desc: 'The same class layout with the three bleacher bays slid out facing the TVs. Your desk rolls over to the alcove, by the server room door, to clear the front tier, and rolls back to the center when the bleachers fold. The student stack stops 34 in. short of the tier.',
-    stats: [['Student seats', '24'], ['Bleacher seats', '36'], ['Teacher desk', 'alcove'], ['Gap to front tier', '34 in.']]
+    desc: 'The same class layout with the two bleacher wings slid out facing the TVs, one on each side of the fixed teacher desk. The two 36 in. wall cabinets and the countertop section come out to make room. The student stack stops 34 in. short of the front tier.',
+    stats: [['Student seats', '24'], ['Bleacher seats', '24'], ['Teacher desk', 'fixed, between the wings'], ['Gap to front tier', '34 in.']]
   },
   pres: {
     bleach: 0, poses: presPoses(), seatPoses: presSeats(), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
-    desc: 'All 13 desks roll out through the northwest door, the server room door, and the 24 student chairs line up in three east-west rows of eight, facing the TVs. The teacher leaves with the teacher desk. The server room cannot hold 13 desks, so each one disappears as it arrives.',
-    stats: [['Chairs', '24 in 3 rows of 8'], ['Row spacing', '40 in.'], ['Seat spacing', '36 in.'], ['Front row to TV wall', '150 in.'], ['Side clearance', '65 in.'], ['Desks', 'all out, teacher too']]
+    desc: 'The 12 student desks roll out through the northwest door and the server room door, and the 24 student chairs line up in three east-west rows of eight, facing the TVs. The teacher desk stays at the south wall. The server room cannot hold 12 desks, so each one disappears as it arrives.',
+    stats: [['Chairs', '24 in 3 rows of 8'], ['Row spacing', '40 in.'], ['Seat spacing', '36 in.'], ['Front row to TV wall', '150 in.'], ['Side clearance', '65 in.'], ['Student desks', 'all out']]
   },
   presb: {
     bleach: 1, poses: presPoses(), seatPoses: presSeats(120), tv: [['Presentation', 'slide 1 of 24', 210], ['Presentation', 'main display', 190], ['Notes', 'speaker view', 230]],
-    desc: 'The presentation layout with the three bleacher bays slid out behind it. The desks and the teacher are gone, the 24 chairs sit in three east-west rows of eight up front, and the bleachers add a second audience tier behind them. The chair rows move 30 in. toward the TVs to leave a walking aisle.',
-    stats: [['Chairs', '24 in 3 rows of 8'], ['Bleacher seats', '36'], ['Front row to TV wall', '120 in.'], ['Last row to front tier', '80 in.'], ['Seat spacing', '36 in.']]
+    desc: 'The presentation layout with the two bleacher wings slid out behind it, one on each side of the fixed teacher desk. The student desks are gone, the 24 chairs sit in three east-west rows of eight up front, and the wings add a second audience tier behind them. The chair rows move 30 in. toward the TVs to leave a walking aisle.',
+    stats: [['Chairs', '24 in 3 rows of 8'], ['Bleacher seats', '24'], ['Total seats', '48'], ['Front row to TV wall', '120 in.'], ['Last row to front tier', '80 in.'], ['Seat spacing', '36 in.']]
   },
   comp: {
     bleach: 1, poses: compPoses(), tv: [['Team West', 'player view', 20], ['Live match', 'main feed', 170], ['Team East', 'player view', 270]],
-    desc: 'Six desks only, in two straight 1x3 rows angled 56 degrees to form a wedge that opens toward the bleachers. Players walk in from the front down the aisle between the teams and turn to their seats, and every screen points away from the other team. Your desk moves to the alcove, and the six extra student desks roll through the alcove into the server room.',
-    stats: [['Player seats', '12'], ['Student desks in room', '6 of 12'], ['Aisle between teams', '46 in.'], ['Spectator seats', '36'], ['Gap to side walls', '14 in.'], ['Gap to front tier', '45 in.']]
+    desc: 'Six desks only, in two straight 1x3 rows angled 56 degrees to form a wedge that opens toward the bleachers. Players walk in from the front down the aisle between the teams and turn to their seats, and every screen points away from the other team. The teacher desk stays at the south wall, and the six extra student desks roll through the alcove into the server room.',
+    stats: [['Player seats', '12'], ['Student desks in room', '6 of 12'], ['Aisle between teams', '46 in.'], ['Spectator seats', '24'], ['Gap to side walls', '14 in.'], ['Gap to front tier', '45 in.']]
   }
 };
 var VIEWS = {
@@ -620,10 +629,7 @@ var VIEWS = {
   side: { pos: [760, 150, 200], target: [160, 40, 200] },
   bleachers: { pos: [200, 98, 352], target: [200, 46, 40], bleach: true },
   facing: { pos: [200, 88, 16], target: [200, 40, 300], bleach: true },
-  teacher: function () {
-    if (mode !== 'class') return { pos: [-41, 58, 165], target: [200, 40, 140] };
-    return { pos: [200, 58, 291], target: [200, 40, 30] };
-  },
+  teacher: { pos: [223, 52, 352], target: [200, 40, 30] },
   server: { pos: [-38, 235, 300], target: [-38, 10, 70] },
   student: function () {
     if (MODES[mode].seatPoses) { var sp = MODES[mode].seatPoses[10]; return { pos: [sp.x, 50, sp.z], target: [sp.x, 34, 0] }; }
@@ -684,6 +690,10 @@ function placeOnPath(i, path, u) {
   cur[i].rot = a.rot + angDiff(a.rot, b.rot) * f;
   applyTuck(i, Math.max(path.routed ? clamp(Math.min(u, 1 - u) / 0.07, 0, 1) : 0, lerp(path.tuck0, path.tuck1, u)));
 }
+function setDemo(on) {   /* the bleachers need the two 36 in. wall cabinets and the countertop section gone */
+  document.getElementById('t-demo').checked = on;
+  demoCabs.forEach(function (m) { m.visible = !on; });
+}
 function setMode(name, instant) {
   var m = MODES[name]; mode = name;
   var quick = instant || REDUCED, usesDoor = false, usesEntry = false, total = 0;
@@ -735,6 +745,7 @@ function setMode(name, instant) {
   tween = { t0: performance.now(), items: items, total: total, door: usesDoor && !quick, entry: usesEntry && !quick, unfreeze: !m.seatPoses };
   bleach.target = m.bleach;
   if (quick) bleach.p = m.bleach;
+  setDemo(!!m.bleach);
   var cb = document.getElementById('t-bleach');
   cb.checked = !!m.bleach;
   desks.forEach(function (d) {
@@ -757,7 +768,7 @@ function setMode(name, instant) {
 function setView(name, instant) {
   var v = VIEWS[name]; if (!v) return;
   if (typeof v === 'function') v = v();
-  if (v.bleach && bleach.target < 1) { bleach.target = 1; document.getElementById('t-bleach').checked = true; }
+  if (v.bleach && bleach.target < 1) { bleach.target = 1; document.getElementById('t-bleach').checked = true; setDemo(true); }
   var dur = (instant || REDUCED) ? 1 : 1200;
   camTw = { t0: performance.now(), dur: dur, p0: camera.position.clone(), g0: controls.target.clone(), p1: new THREE.Vector3(v.pos[0], v.pos[1], v.pos[2]), g1: new THREE.Vector3(v.target[0], v.target[1], v.target[2]) };
   document.querySelectorAll('#views button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.view === name ? 'true' : 'false'); });
@@ -770,7 +781,7 @@ controls.addEventListener('start', function () {
   /* ---------- UI wiring ---------- */
   document.querySelectorAll('#modes button').forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode, false); }); });
   document.querySelectorAll('#views button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.view, false); }); });
-  document.getElementById('t-bleach').addEventListener('change', function (e) { bleach.target = e.target.checked ? 1 : 0; });
+  document.getElementById('t-bleach').addEventListener('change', function (e) { bleach.target = e.target.checked ? 1 : 0; setDemo(e.target.checked); });
   document.getElementById('t-bleachon').addEventListener('change', function (e) {
     var on = e.target.checked;
     bleach.tiers.forEach(function (t) { t.group.visible = on; });
@@ -828,7 +839,7 @@ controls.addEventListener('start', function () {
     srv.a += (srv.target - srv.a) * Math.min(1, dt * 3.5);
     srv.pivot.rotation.y = -(Math.PI / 2) * srv.a;
     ent.a += (ent.target - ent.a) * Math.min(1, dt * 3.5);
-    ent.pivot.rotation.y = (Math.PI / 2) * ent.a;
+    ent.pivot.rotation.y = -(Math.PI / 2) * ent.a;
     var dp = bleach.target - bleach.p;
     if (Math.abs(dp) > 0.0005) { bleach.p += Math.sign(dp) * Math.min(Math.abs(dp), dt / 1.7); setBleachers(bleach.p); }
 
