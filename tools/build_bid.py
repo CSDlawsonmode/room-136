@@ -31,7 +31,7 @@ E.append(table([
     ["<b>Desks and chairs</b>", "13 desks and 28 chairs.", "Not provided"],
     ["<b>Computers</b>", "25 PCs in all: 24 student PCs and one teacher PC. A second teacher PC for esports streaming may be added; the district will confirm.", "24 student PCs at about $2,700 each, about $64,800 (district figure). Teacher PC: not provided."],
     ["<b>Keyboards and mice</b>", "New keyboards and mice for the room. Quantity not yet entered.", "Keyboards about $120 each, mice about $60 each ($180 per keyboard and mouse set)."],
-    ["<b>Local server</b>", "A district-run local server will run the games, student logins, accounts and maintenance for the lab, in place of a paid subscription service such as SENET or ggRock. Not part of this bid. Do not include game-library or lab-management software or subscriptions in your price.", "Not provided"],
+    ["<b>Local server</b>", "A district-run local server, kept in the shared room to the northwest, will run the games, student logins, accounts and maintenance for the lab, in place of a paid subscription service such as SENET or ggRock. Not part of this bid. Do not include game-library or lab-management software or subscriptions in your price.", "Not provided"],
 ], [PW * .17, PW * .57, PW * .26]))
 E.append(P("Values are the district's own figures, shown so bidders can see the investment already in the room. Only the student PC figure has been entered so far; the others will be completed before release or left out.", S))
 E.append(P("The six phases", H2))
@@ -50,7 +50,7 @@ E.append(table([
     ["Item", "Dimension or condition"],
     ["Main room", "400 in. x 376 in. (33 ft 4 in. x 31 ft 4 in.), about 1,044 sq ft; 10 ft ceiling; level floor with existing floor power and network boxes (see above). Ceiling type, slab and what is above the ceiling are to be confirmed on site."],
     ["Southwest alcove", "76 in. x 194 in., open to the room (no wall between the alcove and the desk area on the west side)."],
-    ["Server room", "76 in. x 130 in., adjoining the northwest corner. Not part of the room; available for equipment if you recommend it."],
+    ["Server room", "76 in. x 130 in., adjoining the northwest corner. Shared with others and not part of the room. It houses the district's local server. Put bid equipment there only if you ask first and the district agrees; district IT controls access."],
     ["Displays", "Three 85 in. TVs on the north wall, centers 86 in. apart, centered on the room. The center TV is the main screen."],
     ["Doors and window", "Three 36 in. doors (north wall near the east corner, east wall near the south corner, southwest entry). Window on the west side of the north end."],
     ["South wall", "Wall cabinets 46 / 36 / 36 in. wide, 13 in. deep, 58 to 85 in. above the floor; one 36 x 30 in. tall cabinet; countertop 145 in. long."],
@@ -140,7 +140,7 @@ E.extend(bl([
     "The room holds more listeners than a home theater sweet spot, with several desk layouts. What do you change from a standard 7.1.4 to cover everyone (speaker choice, more overheads, delay and level)?",
     "The west side next to the desk zone is an open alcove, so there is no wall for the left side surround. Figure 3 shows it on the alcove wall, which is farther away than the right side. Propose a balanced solution.",
     "The rear surrounds sit over the south-wall cabinets and the bleachers (Phase 3). Confirm mounting height and clearance above the top row.",
-    "Where do you recommend the electronics (the server room, the tall cabinet, or where the existing fiber cables end), and what HDMI cable type and length does that need?",
+    "Where do you recommend the electronics (the tall cabinet, where the existing fiber cables end, or the shared server room if the district agrees), and what HDMI cable type and length does that need?",
 ]))
 
 # ------------------------------------------------ phase 5
