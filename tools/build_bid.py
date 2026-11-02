@@ -182,13 +182,13 @@ E.append(P("Requirements for every phase", H2))
 E.extend(bl([
     "Prices are firm for 90 days. The district is expected to be tax-exempt; purchasing will confirm.",
     "Each phase is priced so it can be awarded alone. Show any discount for combining phases.",
-    "Work happens outside class hours or during breaks. Give your proposed schedule and the days the room is out of use. Contractor staff must meet district requirements for badging and background checks; district purchasing will supply them.",
+    "Work happens outside class hours or during breaks; give your schedule and the days the room is out of use. Contractor staff must meet district badging and background-check requirements, which purchasing will supply.",
     "Product substitutions are welcome when they meet or beat the requirements. List the model numbers you propose and why.",
     "Submit with your bid: product data sheets, one marked-up plan per phase, manufacturer and labor warranty terms, lead times, and three references from school or public projects.",
     "At handover: as-built drawings, exported device configuration (receiver, bridge, sync box, cameras), district-owned account access, the operating guide, and staff training.",
 ]))
 E.append(P("Questions about this bid", H2))
-E.append(P("Send written questions to Chad Lawson (contact at the top). Answers will go to every bidder. Site visits are by appointment; we recommend one before you price, to confirm the ceiling, the north wall, the south wall and the west alcove."))
+E.append(P("Send written questions to Chad Lawson (contact above); answers go to every bidder. Site visits are by appointment, ideally before you price."))
 E.append(PageBreak())
 
 # ------------------------------------------------ price sheet
